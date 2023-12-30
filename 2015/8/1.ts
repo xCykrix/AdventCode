@@ -10,16 +10,16 @@ class AOC extends AOCBase {
     // Execute AOC and Benchmarks (if applicable).
     b?.start();
     for (let v of this.inputAsList) {
-      // mem1.addInteger(v.length);
-      v = v.replace(/^"/, '"\\"').replace(/\"$/, '\\""')
-      console.info(v);
-      console.info(JSON.parse(v))
-      // v.replaceAll(/(\\x[a-f0-9]{2})/g, '_');
+      mem1.addInteger(v.length);
+
+      v = v.replace(/\\x([a-f\d]{2})/g, "\\u00$1")
+      v = JSON.parse(v);
+      mem2.addInteger(v.length);
     }
     b?.end();
 
     // Store Result.
-    // resultStorage.set(defaultStorage.getAsString());
+    resultStorage.set(`${(mem1.get() - mem2.get())}`);
   }
 }
 
