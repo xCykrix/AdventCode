@@ -36,7 +36,7 @@ class AOC extends AOCBase {
       }
 
       if (has2Matches && hasSingleCharacter) {
-        defaultCache.addValue(cursor.getAsString(), 'nice');
+        defaultCache.setValue(cursor.getAsString(), 'nice');
       }
     }
     b?.end();

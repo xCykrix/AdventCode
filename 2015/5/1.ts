@@ -53,7 +53,7 @@ class AOC extends AOCBase {
       }
 
       if (hasTwiceInRow && hasThreeVowels) {
-        defaultCache.addValue(cursor.getAsString(), 'nice');
+        defaultCache.setValue(cursor.getAsString(), 'nice');
       }
     }
     b?.end();

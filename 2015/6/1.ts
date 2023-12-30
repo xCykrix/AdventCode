@@ -24,13 +24,13 @@ class AOC extends AOCBase {
       for (let tx1 = x; tx1 <= x2; tx1++) {
         for (let ty1 = y; ty1 <= y2; ty1++) {
           if (action === 'turn on') {
-            defaultCache.addValue(`${tx1}:${ty1}`, true);
+            defaultCache.setValue(`${tx1}:${ty1}`, true);
           }
           if (action === 'turn off') {
-            defaultCache.addValue(`${tx1}:${ty1}`, false);
+            defaultCache.setValue(`${tx1}:${ty1}`, false);
           }
           if (action === 'toggle') {
-            defaultCache.addValue(`${tx1}:${ty1}`, !(defaultCache.get(`${tx1}:${ty1}`) ?? false));
+            defaultCache.setValue(`${tx1}:${ty1}`, !(defaultCache.get(`${tx1}:${ty1}`) ?? false));
           }
         }
       }

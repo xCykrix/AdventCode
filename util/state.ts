@@ -105,7 +105,7 @@ export class AOCGenericStorage<T = string> {
 export class AOCCache<B = string> {
   private _cache: Map<string, B> = new Map<string, B>();
 
-  public addValue(key: string, value: B): void {
+  public setValue(key: string, value: B): void {
     this._cache.set(key, value)
   }
 
@@ -123,6 +123,10 @@ export class AOCCache<B = string> {
 
   public getAll(): [string, B][] {
     return Array.from(this._cache.entries());
+  }
+
+  public has(key: string): boolean {
+    return this._cache.has(key);
   }
 
   public delete(key: string): void {

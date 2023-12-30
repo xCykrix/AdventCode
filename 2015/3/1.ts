@@ -7,7 +7,7 @@ class AOC extends AOCBase {
     const resultStorage = self.storage.getStorage('output', '');
 
     // Add Default Cache
-    defaultCache.addValue('0:0', 0);
+    defaultCache.setValue('0:0', 0);
     let x = 0;
     let y = 0;
 

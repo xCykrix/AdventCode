@@ -7,7 +7,7 @@ class AOC extends AOCBase {
     const resultStorage = self.storage.getStorage('output', '');
 
     // Add Default Cache
-    defaultCache.addValue('0:0', 0);
+    defaultCache.setValue('0:0', 0);
     let robotSantaTurn = false;
     let ax = 0;
     let ay = 0;
