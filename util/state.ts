@@ -3,6 +3,7 @@ import { getInputAsList } from './input.ts';
 import { getInputAsString } from './input.ts';
 
 export abstract class AOC {
+  public helper = new AOCHelper();
   public storage = new StorageHelper();
 
   async execute(): Promise<void> {
@@ -14,7 +15,19 @@ export abstract class AOC {
 }
 
 export class AOCHelper {
-
+  public getInput(inputType: InputType, separator?: string): string | string[] | string[][] {
+    switch (inputType) {
+      case InputType.STRING: {
+        return getInputAsString('./input');
+      }
+      case InputType.LIST: {
+        return getInputAsList('./input');
+      }
+      case InputType.SEPARATED_LIST: {
+        return getInputAsSeparatedList('./input', separator);
+      }
+    }
+  }
 }
 
 export class StorageHelper {
@@ -88,20 +101,7 @@ export enum InputType {
 //   public storage = new AOCStorageService();
 
 //   public constructor(inputType: InputType, separator = '') {
-//     switch (inputType) {
-//       case 'STRING': {
-//         this.inputAsString = getInputAsString('./input');
-//         break;
-//       }
-//       case 'LIST': {
-//         this.inputAsList = getInputAsList('./input');
-//         break;
-//       }
-//       case 'SEPARATED_LIST': {
-//         this.inputAsSeparatedList = getInputAsSeparatedList('./input', separator);
-//         break;
-//       }
-//     }
+
 //   }
 
 
