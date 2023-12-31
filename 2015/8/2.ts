@@ -11,12 +11,7 @@ class AOC extends AOCBase {
     b?.start();
     for (let v of this.inputAsList) {
       mem1.addInteger(v.length);
-
-      v = v.replace(/\\x([a-f\d]{2})/g, "\\u00$1")
-      v = v.replace(/\\/g, "\\\\");
-      v = v.replace(/"/g, "\\\"");
-      v = JSON.parse(v);
-      console.info(v)
+      v = JSON.stringify(v);
       mem2.addInteger(v.length);
     }
     b?.end();
