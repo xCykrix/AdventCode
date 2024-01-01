@@ -1,46 +1,26 @@
-import { AOCBase } from '../../util/state.ts';
+import { AOC, InputType } from '../../util/state.ts';
 
-class AOC extends AOCBase {
-  override async evaluate(b: Deno.BenchContext | null, self: AOCBase): Promise<void> {
-    const defaultStorage = self.storage.getStorage('default', 0);
-    const iterStorage = self.storage.getStorage('MEM1', 0);
-    const resultStorage = self.storage.getStorage('output', '');
+class AOCDay extends AOC {
+  override async evaluate(): Promise<void> {
+    const defaultStorage = this.storage.getValueStorage<number>(0);
+    const floorStorage = this.storage.getValueStorage<number>(0);
 
-    b?.start();
-    for (const v of this.inputAsSeparatedList[0]!) {
-      if (v === '(') {
-        defaultStorage.addInteger();
-      }
-      if (v === ')') {
-        defaultStorage.subtractInteger();
-      }
+    // Start of AOC
+    for (const v of this.helper.getInput(InputType.SEPARATED_STRING, '')) {
+      if (v === '(') defaultStorage.addNumberToValue(1);
+      else defaultStorage.subtractNumberFromValue(1);
 
-      iterStorage.addInteger();
-      if (defaultStorage.get() < 0) {
-        resultStorage.set(iterStorage.getAsString());
+      floorStorage.addNumberToValue(1);
+      if (defaultStorage.value! < 0) {
         break;
       }
     }
-    b?.end();
+
+    // Store Result of AOC.
+    this.storage.getValueStorage('Unknown', 'value').value = floorStorage.getValueAsString();
   }
 }
-const aoc = new AOC('SEPARATED_LIST', '');
+
+// // Execute AOC.
+const aoc = new AOCDay();
 await aoc.execute();
-
-
-// import { getInputAsSeparatedList } from '../../util/input.ts';
-// import { info } from '../../util/log.ts';
-// import { AOCNumberStorage } from '../../util/state.ts';
-
-// const input = getInputAsSeparatedList('./input', '');
-// const aoc = new AOCNumberStorage(0);
-// const position = new AOCNumberStorage(0);
-
-
-//   // Check the position.
-//   position.add();
-//   if (aoc.get() < 0) {
-//     info("Basement Found:", position.getAsString());
-//     break;
-//   }
-// }

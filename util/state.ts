@@ -1,4 +1,4 @@
-import { getInputAsSeparatedList } from './input.ts';
+import { getInputAsSeparatedList, getInputAsSeparatedString } from './input.ts';
 import { getInputAsList } from './input.ts';
 import { getInputAsString } from './input.ts';
 
@@ -8,7 +8,7 @@ export abstract class AOC {
 
   async execute(): Promise<void> {
     await this.evaluate();
-    console.info('Result:', this.storage.getValueStorage('value')?.getValueAsString());
+    console.info('Result:', this.storage.getValueStorage('Unknown', 'value')?.getValueAsString());
   }
 
   abstract evaluate(): Promise<void>;
@@ -19,6 +19,9 @@ export class AOCHelper {
     switch (inputType) {
       case InputType.STRING: {
         return getInputAsString('./input');
+      }
+      case InputType.SEPARATED_STRING: {
+        return getInputAsSeparatedString('./input', separator);
       }
       case InputType.LIST: {
         return getInputAsList('./input');
@@ -34,19 +37,25 @@ export class StorageHelper {
   private stMapStorage: Map<string, STMap> = new Map();
   private stValueStorage: Map<string, STValue> = new Map();
 
-  public getMapStorage<T = string>(id = crypto.randomUUID()): STMap<T> | null {
+  public getMapStorage<T = string>(id = crypto.randomUUID()): STMap<T> {
     if (!this.stMapStorage.has(id)) this.stMapStorage.set(id, new STMap<T>());
     return this.stMapStorage.get(id) as STMap<T> ?? null;
   }
 
-  public getValueStorage<T = string>(id = crypto.randomUUID()): STValue<T> | null {
-    if (!this.stValueStorage.has(id)) this.stValueStorage.set(id, new STValue<T>(null));
+  public getValueStorage<T = string>(defaultValue: T, id = crypto.randomUUID()): STValue<T> {
+    if (!this.stValueStorage.has(id)) this.stValueStorage.set(id, new STValue<T>(defaultValue ?? null));
     return this.stValueStorage.get(id) as STValue<T>;
   }
 }
 
 export class STMap<T = unknown> extends Map<string, STValue<T>> {
+  public addIntegerToValue(key: string, integer: number): void {
+    this.get(key)?.addNumberToValue(integer);
+  }
 
+  public subtractIntegerFromValue(key: string, integer: number): void {
+    this.addIntegerToValue(key, integer * -1);
+  }
 }
 
 export class STValue<T = unknown> {
@@ -84,6 +93,7 @@ export class STValue<T = unknown> {
 
 export enum InputType {
   STRING,
+  SEPARATED_STRING,
   LIST,
   SEPARATED_LIST,
 }
@@ -176,13 +186,7 @@ export enum InputType {
 //     this._cache.set(key, value)
 //   }
 
-//   public addIntegerToValue(key: string, integer: number): void {
-//     this._cache.set(key, parseInt((this._cache.get(key) ?? 0) as string) + integer as B);
-//   }
 
-//   public subtractIntegerFromValue(key: string, integer: number): void {
-//     this._cache.set(key, parseInt((this._cache.get(key) ?? 0) as string) - integer as B);
-//   }
 
 //   public get(key: string): B | null {
 //     return this._cache.get(key) ?? null

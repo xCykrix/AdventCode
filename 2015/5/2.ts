@@ -1,4 +1,4 @@
-import { SeparatedListCursor } from '../../util/input.ts';
+import { Cursor } from '../../util/input.ts';
 import { AOCBase } from '../../util/state.ts';
 
 class AOC extends AOCBase {
@@ -10,7 +10,7 @@ class AOC extends AOCBase {
     // Execute AOC and Benchmarks (if applicable).
     b?.start();
     for (const v of this.inputAsSeparatedList) {
-      const cursor = new SeparatedListCursor(v);
+      const cursor = new Cursor(v);
       let has2Matches = false;
       let hasSingleCharacter = false;
 

@@ -1,49 +1,43 @@
-import { AOCBase } from '../../util/state.ts';
+import { AOC, InputType } from '../../util/state.ts';
 
-class AOC extends AOCBase {
-  override async evaluate(b: Deno.BenchContext | null, self: AOCBase): Promise<void> {
-    // Load the State. This includes preparing memory and reading from disk.
-    const defaultCache = self.storage.getCache('default');
-    const resultStorage = self.storage.getStorage('output', '');
+class AOCDay extends AOC {
+  override async evaluate(): Promise<void> {
+    const defaultStorage = this.storage.getValueStorage<number>(0);
+    const defaultMap = this.storage.getMapStorage<number>();
 
-    // Add Default Cache
-    defaultCache.setValue('0:0', 0);
-    let x = 0;
-    let y = 0;
+    // Current Coordinates
+    let x = this.storage.getValueStorage<number>(0);
+    let y = this.storage.getValueStorage<number>(0);
 
-    // Execute AOC and Benchmarks (if applicable).
-    b?.start();
-    for (const v of this.inputAsSeparatedList[0]!) {
-      // Process the input.
+    // Start of AOC
+    for (const v of this.helper.getInput(InputType.SEPARATED_STRING, '')) {
       switch (v) {
         case '^': {
-          y = y + 1;
+          y.addNumberToValue(1);
           break;
         }
         case 'v': {
-          y = y - 1;
+          y.subtractNumberFromValue(1);
           break;
         }
         case '>': {
-          x = x + 1;
+          x.addNumberToValue(1);
           break;
         }
         case '<': {
-          x = x - 1;
+          x.subtractNumberFromValue(1);
           break;
         }
       }
 
-      // Update cached plane.
-      defaultCache.addIntegerToValue(`${x}:${y}`, 1);
+      defaultMap.addIntegerToValue(`${x.value}:${y.value}`, 1);
     }
-    b?.end();
 
-    // Store Result.
-    resultStorage.set(`${defaultCache.getSize()}`);
+    // Store Result of AOC.
+    this.storage.getValueStorage('Unknown', 'value').value = defaultStorage.getValueAsString();
   }
 }
 
-// Execute AOC.
-const aoc = new AOC('SEPARATED_LIST', '');
+// // Execute AOC.
+const aoc = new AOCDay();
 await aoc.execute();

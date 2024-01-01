@@ -1,14 +1,11 @@
-import { AOCBase } from '../../util/state.ts';
+import { AOC, InputType } from '../../util/state.ts';
 
-class AOC extends AOCBase {
-  override async evaluate(b: Deno.BenchContext | null, self: AOCBase): Promise<void> {
-    // Load the State. This includes preparing memory and reading from disk.
-    const defaultStorage = self.storage.getStorage('default', 0);
-    const resultStorage = self.storage.getStorage('output', '');
+class AOCDay extends AOC {
+  override async evaluate(): Promise<void> {
+    const defaultStorage = this.storage.getValueStorage<number>(0);
 
-    // Execute AOC and Benchmarks (if applicable).
-    b?.start();
-    for (const v of this.inputAsSeparatedList!) {
+    // Start of AOC
+    for (const v of this.helper.getInput(InputType.SEPARATED_LIST, 'x')) {
       // Process the input.
       const l = parseInt(v[0]!);
       const w = parseInt(v[1]!);
@@ -23,15 +20,14 @@ class AOC extends AOCBase {
       const ordered = [lw, wh, hl].sort((a, b) => a - b);
 
       // Add to result.
-      defaultStorage.addInteger(ordered[0]! + ((2 * lw) + (2 * wh) + (2 * hl)));
+      defaultStorage.addNumberToValue(ordered[0]! + ((2 * lw) + (2 * wh) + (2 * hl)));
     }
-    b?.end();
 
-    // Store Result.
-    resultStorage.set(defaultStorage.getAsString());
+    // Store Result of AOC.
+    this.storage.getValueStorage('Unknown', 'value').value = defaultStorage.getValueAsString();
   }
 }
 
-// Execute AOC.
-const aoc = new AOC('SEPARATED_LIST', 'x');
+// // Execute AOC.
+const aoc = new AOCDay();
 await aoc.execute();
