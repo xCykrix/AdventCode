@@ -1,13 +1,15 @@
-import { AOC, InputType } from '../../util/state.ts';
+import { AOC, InputType, STValue } from '../../util/state.ts';
 
 class AOCDay extends AOC {
   override async evaluate(): Promise<void> {
-    const defaultStorage = this.storage.getValueStorage<number>(0);
     const defaultMap = this.storage.getMapStorage<number>();
 
     // Current Coordinates
-    let x = this.storage.getValueStorage<number>(0);
-    let y = this.storage.getValueStorage<number>(0);
+    const x = this.storage.getValueStorage<number>(0);
+    const y = this.storage.getValueStorage<number>(0);
+
+    // Load 0:0 to Cache
+    defaultMap.set(`0:0`, new STValue<number>(1));
 
     // Start of AOC
     for (const v of this.helper.getInput(InputType.SEPARATED_STRING, '')) {
@@ -30,11 +32,11 @@ class AOCDay extends AOC {
         }
       }
 
-      defaultMap.addIntegerToValue(`${x.value}:${y.value}`, 1);
+      defaultMap.addIntegerToValue(`${x}:${y}`, 1);
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = defaultStorage.getValueAsString();
+    this.storage.getValueStorage(0, 'value').value = defaultMap.size;
   }
 }
 

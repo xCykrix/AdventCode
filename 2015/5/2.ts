@@ -1,16 +1,14 @@
-import { Cursor } from '../../util/input.ts';
-import { AOCBase } from '../../util/state.ts';
+import { InputCursor } from '../../util/input.ts';
+import { AOC, InputType, STValue } from '../../util/state.ts';
 
-class AOC extends AOCBase {
-  override async evaluate(b: Deno.BenchContext | null, self: AOCBase): Promise<void> {
-    // Load the State. This includes preparing memory and reading from disk.
-    const defaultCache = self.storage.getCache<string>('default');
-    const resultStorage = self.storage.getStorage('output', '');
+class AOCDay extends AOC {
+  override async evaluate(): Promise<void> {
+    const defaultMap = this.storage.getMapStorage<boolean>();
 
-    // Execute AOC and Benchmarks (if applicable).
-    b?.start();
-    for (const v of this.inputAsSeparatedList) {
-      const cursor = new Cursor(v);
+
+    // Start of AOC
+    for (const v of this.helper.getInput(InputType.SEPARATED_LIST, '')) {
+      const cursor = new InputCursor(v as string[]);
       let has2Matches = false;
       let hasSingleCharacter = false;
 
@@ -36,16 +34,30 @@ class AOC extends AOCBase {
       }
 
       if (has2Matches && hasSingleCharacter) {
-        defaultCache.setValue(cursor.getAsString(), 'nice');
+        defaultMap.set(cursor.getAsString(), new STValue(true));
       }
     }
-    b?.end();
 
-    // Store Result.
-    resultStorage.set(`${defaultCache.getSize()}`);
+    // Store Result of AOC.
+    this.storage.getValueStorage(0, 'value').value = defaultMap.size;
   }
 }
 
-// Execute AOC.
-const aoc = new AOC('SEPARATED_LIST', '');
+// // Execute AOC.
+const aoc = new AOCDay();
 await aoc.execute();
+
+//   for (const v of this.inputAsSeparatedList) {
+//     const cursor = new InputCursor(v);
+//     let has2Matches = false;
+//     let hasSingleCharacter = false;
+
+
+//     if (has2Matches && hasSingleCharacter) {
+//       defaultCache.setValue(cursor.getAsString(), 'nice');
+//     }
+//   }
+//   b?.end();
+
+//   // Store Result.
+//   resultStorage.set(`${defaultCache.getSize()}`);

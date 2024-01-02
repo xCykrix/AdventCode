@@ -1,69 +1,63 @@
-import { Cursor } from '../../util/input.ts';
-import { AOCBase } from '../../util/state.ts';
+import { InputCursor } from '../../util/input.ts';
+import { AOC, InputType, STValue } from '../../util/state.ts';
 
-class AOC extends AOCBase {
-  override async evaluate(b: Deno.BenchContext | null, self: AOCBase): Promise<void> {
-    // Load the State. This includes preparing memory and reading from disk.
-    const defaultCache = self.storage.getCache<string>('default');
-    const memCache = self.storage.getCache<number>('MEM1');
-    const resultStorage = self.storage.getStorage('output', '');
-    const blacklist = ['ab', 'cd', 'pq', 'xy'];
+class AOCDay extends AOC {
+  override async evaluate(): Promise<void> {
+    const defaultMap = this.storage.getMapStorage<boolean>();
+    const cache = this.storage.getMapStorage<number>();
+    const blacklisted = ['ab', 'cd', 'pq', 'xy']
+    const vowels = ['a', 'e', 'i', 'o', 'u'];
 
-    // Execute AOC and Benchmarks (if applicable).
-    b?.start();
-    for (const v of this.inputAsSeparatedList) {
-      const cursor = new Cursor(v);
-      let blacklisted = false;
+    // Start of AOC
+    for (const v of this.helper.getInput(InputType.SEPARATED_LIST, '')) {
+      const cursor = new InputCursor(v as string[]);
+      let blacklistFound = false;
       let hasThreeVowels = false;
       let hasTwiceInRow = false;
+      cache.clear();
 
-      for (const blacklist of ['ab', 'cd', 'pq', 'xy']) {
+      // Rule 3: Check for Blacklisted Combinations.
+      for (const blacklist of blacklisted) {
         if (cursor.getAsString().includes(blacklist)) {
-          blacklisted = true;
+          blacklistFound = true;
           break;
         }
       }
+      if (blacklistFound) continue;
 
-      memCache.deleteAll();
       while (cursor.hasNext()) {
         // Get Inputs and Step.
         const value = cursor.get()!;
         const previous = cursor.getPrev();
         const next = cursor.getNext();
         cursor.stepPositionForwards(1);
-        memCache.addIntegerToValue(value, 1);
+        cache.addIntegerToValue(value, 1);
 
-        // Rule: Two letters that appear twice in a row.
-        if (blacklist.includes(`${value}${next}`)) {
-          blacklisted = true;
-        }
+        // Rule 2: Two letters that appear twice in a row.
         if (value === previous || value === next) {
           hasTwiceInRow = true;
         }
       }
-      if (blacklisted) continue;
 
-      // Rule: At Least 3 Vowels
+      // Rule 1: At Least 3 Vowels.
       let totalVowels = 0;
-      for (const vowel of ['a', 'e', 'i', 'o', 'u']) {
-        totalVowels += memCache.get(vowel) ?? 0;
+      for (const vowel of vowels) {
+        totalVowels += cache.get(vowel)?.value ?? 0;
       }
       if (totalVowels >= 3) {
         hasThreeVowels = true;
       }
 
       if (hasTwiceInRow && hasThreeVowels) {
-        defaultCache.setValue(cursor.getAsString(), 'nice');
+        defaultMap.set(cursor.getAsString(), new STValue(true));
       }
     }
-    b?.end();
 
-    // Store Result.
-    resultStorage.set(`${defaultCache.getSize()}`);
+    // Store Result of AOC.
+    this.storage.getValueStorage(0, 'value').value = defaultMap.size;
   }
 }
 
-// Execute AOC.
-const aoc = new AOC('SEPARATED_LIST', '');
+// // Execute AOC.
+const aoc = new AOCDay();
 await aoc.execute();
-
