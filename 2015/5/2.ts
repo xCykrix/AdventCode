@@ -5,7 +5,6 @@ class AOCDay extends AOC {
   override async evaluate(): Promise<void> {
     const defaultMap = this.storage.getMapStorage<boolean>();
 
-
     // Start of AOC
     for (const v of this.helper.getInput(InputType.SEPARATED_LIST, '')) {
       const cursor = new InputCursor(v as string[]);
@@ -46,18 +45,3 @@ class AOCDay extends AOC {
 // // Execute AOC.
 const aoc = new AOCDay();
 await aoc.execute();
-
-//   for (const v of this.inputAsSeparatedList) {
-//     const cursor = new InputCursor(v);
-//     let has2Matches = false;
-//     let hasSingleCharacter = false;
-
-
-//     if (has2Matches && hasSingleCharacter) {
-//       defaultCache.setValue(cursor.getAsString(), 'nice');
-//     }
-//   }
-//   b?.end();
-
-//   // Store Result.
-//   resultStorage.set(`${defaultCache.getSize()}`);

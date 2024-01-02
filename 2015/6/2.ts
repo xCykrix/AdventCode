@@ -1,52 +1,43 @@
-import { AOCBase } from '../../util/state.ts';
+import { AOC, InputType } from '../../util/state.ts';
 
-class AOC extends AOCBase {
-  override async evaluate(b: Deno.BenchContext | null, self: AOCBase): Promise<void> {
-    // Load the State. This includes preparing memory and reading from disk.
-    const defaultCache = self.storage.getCache<number>('default');
-    const resultStorage = self.storage.getStorage('output', '');
+class AOCDay extends AOC {
+  override async evaluate(): Promise<void> {
+    const defaultCache = this.storage.getMapStorage<number>();
 
-    // Load Regular Expressions
+    // Define Regular Expressions
     const parseCommand = /(turn on|turn off|toggle) (\d+),(\d+) through (\d+),(\d+)/
 
-    // Execute AOC and Benchmarks (if applicable).
-    b?.start();
-    for (const v of this.inputAsList) {
-      let [action, x, y, x2, y2] = ['off', 0, 0, 0, 0];
+    // Start of AOC
+    for (const v of this.helper.getInput(InputType.LIST, '') as string) {
+      let [action, x1, y1, x2, y2] = ['off', 0, 0, 0, 0];
       const match = v.match(parseCommand);
-      if (match === null) throw new Error('Unexpected null match.');
-      action = match[1]!;
-      x = parseInt(match[2]!);
-      y = parseInt(match[3]!);
-      x2 = parseInt(match[4]!);
-      y2 = parseInt(match[5]!);
+      action = match![1]!;
+      x1 = parseInt(match![2]!);
+      y1 = parseInt(match![3]!);
+      x2 = parseInt(match![4]!);
+      y2 = parseInt(match![5]!);
 
-      for (let tx1 = x; tx1 <= x2; tx1++) {
-        for (let ty1 = y; ty1 <= y2; ty1++) {
+      for (let cx = x1; cx <= x2; cx++) {
+        for (let cy = y1; cy <= y2; cy++) {
           if (action === 'turn on') {
-            defaultCache.addIntegerToValue(`${tx1}:${ty1}`, 1);
+            defaultCache.addIntegerToValue(`${cx}:${cy}`, 1);
           }
           if (action === 'turn off') {
-            if ((defaultCache.get(`${tx1}:${ty1}`) ?? 0) <= 0) continue;
-            defaultCache.subtractIntegerFromValue(`${tx1}:${ty1}`, 1);
+            if ((defaultCache.get(`${cx}:${cy}`)?.value ?? 0) <= 0) continue;
+            defaultCache.subtractIntegerFromValue(`${cx}:${cy}`, 1);
           }
           if (action === 'toggle') {
-            defaultCache.addIntegerToValue(`${tx1}:${ty1}`, 2);
+            defaultCache.addIntegerToValue(`${cx}:${cy}`, 2);
           }
         }
       }
     }
-    b?.end();
 
-    // Store Result.
-    let r = 0;
-    defaultCache.getAll().map(([_k, v]) => {
-      r = r + v;
-    });
-    resultStorage.set(`${r}`);
+    // Store Result of AOC.
+    this.storage.getValueStorage('Unknown', 'value').value = Array.from(defaultCache.values()).reduce((a, v) => a + v.value!, 0).toString();
   }
 }
 
-// Execute AOC.
-const aoc = new AOC('LIST', '');
+// // Execute AOC.
+const aoc = new AOCDay();
 await aoc.execute();
