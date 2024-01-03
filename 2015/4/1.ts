@@ -5,15 +5,15 @@ import * as standardBytes from "https://deno.land/std@0.210.0/bytes/mod.ts";
 import { encodeHex } from 'https://deno.land/std@0.210.0/encoding/hex.ts';
 
 class AOCDay extends AOC {
+  private store = this.storage.getValueStorage<number>(0);
+
   override async evaluate(): Promise<void> {
-    const defaultStorage = this.storage.getValueStorage<number>(0);
     const uint8Compare = new Uint8Array([0, 0]);
 
-    // Start of AOC
     const v = this.helper.getInput(InputType.STRING, '');
     while (true) {
       // Generate input to MD5.
-      const value = `${v}${defaultStorage}`;
+      const value = `${v}${this.store}`;
 
       // Calculate the md5hash.
       // deno-lint-ignore no-await-in-loop
@@ -22,14 +22,14 @@ class AOCDay extends AOC {
       // Fast fail with raw byte comparison. Checks for partial answer of 0000.
       const buffer = new Uint8Array(md5hash);
       if (!standardBytes.startsWith(buffer, uint8Compare)) {
-        defaultStorage.addNumberToValue(1);
+        this.store.addNumberToValue(1);
         continue;
       }
 
       // Slow fail with encoding to hex and validating startsWith to check for 00000 after above passes.
       const hex = encodeHex(md5hash);
       if (!hex.startsWith('00000')) {
-        defaultStorage.addNumberToValue(1);
+        this.store.addNumberToValue(1);
         continue;
       }
 
@@ -37,7 +37,7 @@ class AOCDay extends AOC {
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = defaultStorage.getValueAsString();
+    this.storage.getValueStorage('Unknown', 'value').value = this.store.getValueAsString();
   }
 }
 

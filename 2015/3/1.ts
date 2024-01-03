@@ -1,42 +1,38 @@
 import { AOC, InputType, STValue } from '../../util/state.ts';
 
 class AOCDay extends AOC {
+  private map = this.storage.getMapStorage<number>();
+  private x = this.storage.getValueStorage<number>(0);
+  private y = this.storage.getValueStorage<number>(0);
+
   override async evaluate(): Promise<void> {
-    const defaultMap = this.storage.getMapStorage<number>();
+    this.map.set(`0:0`, new STValue<number>(1));
 
-    // Current Coordinates
-    const x = this.storage.getValueStorage<number>(0);
-    const y = this.storage.getValueStorage<number>(0);
-
-    // Load 0:0 to Cache
-    defaultMap.set(`0:0`, new STValue<number>(1));
-
-    // Start of AOC
     for (const v of this.helper.getInput(InputType.SEPARATED_STRING, '')) {
       switch (v) {
         case '^': {
-          y.addNumberToValue(1);
+          this.y.addNumberToValue(1);
           break;
         }
         case 'v': {
-          y.subtractNumberFromValue(1);
+          this.y.subtractNumberFromValue(1);
           break;
         }
         case '>': {
-          x.addNumberToValue(1);
+          this.x.addNumberToValue(1);
           break;
         }
         case '<': {
-          x.subtractNumberFromValue(1);
+          this.x.subtractNumberFromValue(1);
           break;
         }
       }
 
-      defaultMap.addIntegerToValue(`${x}:${y}`, 1);
+      this.map.addIntegerToValue(`${this.x}:${this.y}`, 1);
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage(0, 'value').value = defaultMap.size;
+    this.storage.getValueStorage(0, 'value').value = this.map.size;
   }
 }
 

@@ -1,28 +1,23 @@
-import { AOCBase } from '../../util/state.ts';
+import { AOC, InputType } from '../../util/state.ts';
 
-class AOC extends AOCBase {
-  override async evaluate(b: Deno.BenchContext | null, self: AOCBase): Promise<void> {
-    // Load the State. This includes preparing memory and reading from disk.
-    const mem1 = self.storage.getStorage('MEM1', 0);
-    const mem2 = self.storage.getStorage('MEM2', 0);
-    const resultStorage = self.storage.getStorage('output', '');
+class AOCDay extends AOC {
+  private store1 = this.storage.getValueStorage<number>(0);
+  private store2 = this.storage.getValueStorage<number>(0);
 
-    // Execute AOC and Benchmarks (if applicable).
-    b?.start();
-    for (let v of this.inputAsList) {
-      mem1.addInteger(v.length);
+  override async evaluate(): Promise<void> {
+    for (let v of this.helper.getInput(InputType.LIST, '') as string) {
+      this.store1.addNumberToValue(v.length);
 
       v = v.replace(/\\x([a-f\d]{2})/g, "\\u00$1")
       v = JSON.parse(v);
-      mem2.addInteger(v.length);
+      this.store2.addNumberToValue(v.length);
     }
-    b?.end();
 
-    // Store Result.
-    resultStorage.set(`${(mem1.get() - mem2.get())}`);
+    // Store Result of AOC.
+    this.storage.getValueStorage('Unknown', 'value').value = `${(this.store1.value! - this.store2.value!)}`
   }
 }
 
-// Execute AOC.
-const aoc = new AOC('LIST', '');
+// // Execute AOC.
+const aoc = new AOCDay();
 await aoc.execute();

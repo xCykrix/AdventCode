@@ -2,10 +2,9 @@ import { InputCursor } from '../../util/input.ts';
 import { AOC, InputType, STValue } from '../../util/state.ts';
 
 class AOCDay extends AOC {
-  override async evaluate(): Promise<void> {
-    const defaultMap = this.storage.getMapStorage<boolean>();
+  private map = this.storage.getMapStorage<boolean>();
 
-    // Start of AOC
+  override async evaluate(): Promise<void> {
     for (const v of this.helper.getInput(InputType.SEPARATED_LIST, '')) {
       const cursor = new InputCursor(v as string[]);
       let has2Matches = false;
@@ -33,12 +32,12 @@ class AOCDay extends AOC {
       }
 
       if (has2Matches && hasSingleCharacter) {
-        defaultMap.set(cursor.getAsString(), new STValue(true));
+        this.map.set(cursor.getAsString(), new STValue(true));
       }
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage(0, 'value').value = defaultMap.size;
+    this.storage.getValueStorage(0, 'value').value = this.map.size;
   }
 }
 
