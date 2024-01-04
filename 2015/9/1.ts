@@ -1,5 +1,6 @@
 import { InputCursor } from '../../util/input.ts';
 import { AOC, InputType, STValue } from '../../util/state.ts';
+import { permutations } from 'https://deno.land/x/combinatorics@1.1.2/mod.ts';
 
 class AOCDay extends AOC {
   private map = this.storage.getMapStorage<number>();
@@ -7,61 +8,45 @@ class AOCDay extends AOC {
   private unique = new Set<string>();
 
   // Regular Expressions
-  private parse = /(.*) to (.*) = (\d+)/
+  private parse = /(.*) to (.*) = (\d+)/;
 
   override async evaluate(): Promise<void> {
     for (const v of this.helper.getInput(InputType.LIST, '') as string) {
+      // Parse the Input State.
       const match = v.match(this.parse);
       const start = match![1]!;
       const end = match![2]!;
       const distance = parseInt(match![3]!);
+      // Add start:end and end:start with distance.
       this.map.set(`${start}:${end}`, new STValue(distance));
       this.map.set(`${end}:${start}`, new STValue(distance));
+      // Add unique list.
       this.unique.add(start);
       this.unique.add(end);
     }
 
-    const permutations = getPermutations(Array.from(this.unique.values()));
-    for (const permutation of permutations) {
+    for (const permutation of permutations(Array.from(this.unique.values()))) {
       let distance = 0;
       const cursor = new InputCursor(permutation);
 
-      while(cursor.hasNext()) {
+      // Iterate the InputCursor.
+      while (cursor.hasNext()) {
         const current = cursor.get();
         const next = cursor.getNext();
         cursor.stepPositionForwards(1);
         if (next === null) continue;
 
+        // Add the Distance of the Next Step Lookup.
         distance += this.map.get(`${current}:${next}`)!.value!;
       }
 
+      // Store the Minimum Distance.
       this.store.value = Math.min(distance, this.store.value!);
     }
 
     // Store Result of AOC.
     this.storage.getValueStorage('Unknown', 'value').value = `${this.store.value}`;
   }
-}
-
-function getPermutations(inputArr: string[]): string[][] {
-  const results: string[][] = [];
-
-  function permute(arr: string[], memo: string[] = []): string[][] {
-    let cur: string[];
-
-    for (let i = 0; i < arr.length; i++) {
-      cur = arr.splice(i, 1);
-      if (arr.length === 0) {
-        results.push(memo.concat(cur));
-      }
-      permute(arr.slice(), memo.concat(cur));
-      arr.splice(i, 0, cur[0]!);
-    }
-
-    return results;
-  }
-
-  return permute(inputArr);
 }
 
 // Execute AOC.

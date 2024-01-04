@@ -5,6 +5,7 @@ class AOCDay extends AOC {
 
   override async evaluate(): Promise<void> {
     for (const v of this.helper.getInput(InputType.SEPARATED_STRING, '')) {
+      // Process '(' and ')' as +1 or -1.
       if (v === '(') this.store.addNumberToValue(1);
       else this.store.subtractNumberFromValue(1);
     }

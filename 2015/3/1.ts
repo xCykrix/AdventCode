@@ -9,6 +9,7 @@ class AOCDay extends AOC {
     this.map.set(`0:0`, new STValue<number>(1));
 
     for (const v of this.helper.getInput(InputType.SEPARATED_STRING, '')) {
+      // Process the ^ v < > characters as +1 and -1 in a 2d plane.
       switch (v) {
         case '^': {
           this.y.addNumberToValue(1);
@@ -28,6 +29,7 @@ class AOCDay extends AOC {
         }
       }
 
+      // Store the present being delivered to point.
       this.map.addIntegerToValue(`${this.x}:${this.y}`, 1);
     }
 

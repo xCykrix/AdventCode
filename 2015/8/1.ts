@@ -6,15 +6,23 @@ class AOCDay extends AOC {
 
   override async evaluate(): Promise<void> {
     for (let v of this.helper.getInput(InputType.LIST, '') as string) {
+      // Add String Length to store1.
       this.store1.addNumberToValue(v.length);
 
-      v = v.replace(/\\x([a-f\d]{2})/g, "\\u00$1")
+      // Replace \x00 format to \u0000 format.
+      // This can also be achieved in a more simple way with eval.
+      // However, I opted to not use this method.
+      v = v.replace(/\\x([a-f\d]{2})/g, '\\u00$1');
+
+      // Parse input as JSON.
       v = JSON.parse(v);
+
+      // Add String Length to store2 after JSON Parse.
       this.store2.addNumberToValue(v.length);
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = `${(this.store1.value! - this.store2.value!)}`
+    this.storage.getValueStorage('Unknown', 'value').value = `${(this.store1.value! - this.store2.value!)}`;
   }
 }
 

@@ -6,7 +6,7 @@ class AOCDay extends AOC {
   private cache = this.storage.getMapStorage<number>();
 
   override async evaluate(): Promise<void> {
-    const blacklisted = ['ab', 'cd', 'pq', 'xy']
+    const blacklisted = ['ab', 'cd', 'pq', 'xy'];
     const vowels = ['a', 'e', 'i', 'o', 'u'];
 
     for (const v of this.helper.getInput(InputType.SEPARATED_LIST, '')) {

@@ -24,29 +24,38 @@ class AOCDay extends AOC {
 
   override async evaluate(): Promise<void> {
     for (const v of this.helper.getInput(InputType.LIST, '') as string[]) {
+      // Parse the Input State.
       const matches = v.match(this.parse);
       const name = matches![1]!;
       const speed = parseInt(matches![2]!);
       const maxDuration = parseInt(matches![3]!);
       const restDuration = parseInt(matches![4]!);
 
-      this.roster.set(name, new STValue({
+      // Store to Roster.
+      this.roster.set(
         name,
-        speed,
-        maxDuration,
-        restDuration,
-        current: 0,
-        distance: 0,
-        isResting: false,
-      }));
+        new STValue({
+          name,
+          speed,
+          maxDuration,
+          restDuration,
+          current: 0,
+          distance: 0,
+          isResting: false,
+        }),
+      );
       this.distance.set(name, new STValue(0));
+
+      // Store Unique Names of Reindeer.
       this.unique.add(name);
     }
 
+    // Run a for loop of each 'tick' of the game.
     for (let i = 0; i < duration; i++) {
-      this.unique.forEach(name => {
+      this.unique.forEach((name) => {
         const reindeer = this.roster.get(name)!.value!;
         if (!reindeer.isResting) {
+          // Reindeer is active. Tick game and wait for sleep state.
           this.distance.addIntegerToValue(name, reindeer.speed);
           reindeer.distance = this.distance.get(name)?.value!;
           reindeer.current += 1;
@@ -54,8 +63,8 @@ class AOCDay extends AOC {
             reindeer.current = 0;
             reindeer.isResting = true;
           }
-          return;
         } else {
+          // Reindeer is sleeping. Tick game and wait for active state.
           reindeer.current += 1;
           if (reindeer.current >= reindeer.restDuration) {
             reindeer.current = 0;
@@ -64,11 +73,12 @@ class AOCDay extends AOC {
         }
       });
 
+      // Add points of current leader after all ticks.
       this.points.addIntegerToValue(Array.from(this.roster.values()).reduce((max, current) => max.value!.distance > current.value!.distance ? max : current).value!.name, 1);
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = `${Math.max(...(Array.from(this.points.values()).map(value => value.value!)))}`;
+    this.storage.getValueStorage('Unknown', 'value').value = `${Math.max(...(Array.from(this.points.values()).map((value) => value.value!)))}`;
   }
 }
 

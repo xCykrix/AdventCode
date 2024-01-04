@@ -1,16 +1,19 @@
 import { AOC, InputType } from '../../util/state.ts';
 
 class AOCDay extends AOC {
-  private store = this.storage.getValueStorage<number>(0);
-
   private count(object: Record<string, unknown>): number {
     let identifiers: unknown[] = [];
+    // Recursively scan for objects and arrays to get numbers.
+
+    // Check if the object is an array or object.
     if (Array.isArray(object)) {
       identifiers = object;
     } else {
-      identifiers = Object.keys(object).map(k => object[k]);
+      identifiers = Object.keys(object).map((k) => object[k]);
     }
 
+    // Map the identifiers to objects or numbers. Recurse objects.
+    // This could also be done in a reduce function.
     let a = 0;
     identifiers.map((v) => {
       let value = 0;
@@ -28,10 +31,13 @@ class AOCDay extends AOC {
 
   override async evaluate(): Promise<void> {
     const v = this.helper.getInput(InputType.STRING, '') as string;
+
+    // Parse to JSON and Count Numbers.
     const parse = JSON.parse(v);
+    const count = this.count(parse);
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = `${this.count(parse)}`;
+    this.storage.getValueStorage('Unknown', 'value').value = `${count}`;
   }
 }
 

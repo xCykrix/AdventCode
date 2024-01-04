@@ -23,35 +23,42 @@ class AOCDay extends AOC {
   // Regular Expressions.
   private parse = /(.*): capacity (-?\d+), durability (-?\d+), flavor (-?\d+), texture (-?\d+), calories (-?\d+)/;
 
-  private cookie(recipe: Recipe): { cookie: number; calories: number; } {
+  private cookie(recipe: Recipe): { score: number; calories: number } {
     let capacity = 0;
     let durability = 0;
     let flavor = 0;
     let texture = 0;
     let calories = 0;
 
+    // Process each ingredient.
     for (const ingredient of this.ingredients.values()) {
       const spoons = recipe[ingredient.value!.ingredient!]!;
       capacity = capacity + (spoons * ingredient.value!.capacity);
       durability = durability + (spoons * ingredient.value!.durability);
       flavor = flavor + (spoons * ingredient.value!.flavor);
       texture = texture + (spoons * ingredient.value!.texture);
+
+      // Add calories.
       calories = calories + (spoons * ingredient.value!.calories);
     }
+
+    // If ingredient score is negative, revert to 0.
     if (capacity < 0) capacity = 0;
     if (durability < 0) durability = 0;
     if (flavor < 0) flavor = 0;
     if (texture < 0) texture = 0;
 
-    const multiplication = capacity * durability * flavor * texture;
+    // Calculate final score and return calories.
+    const score = capacity * durability * flavor * texture;
     return {
-      cookie: multiplication,
-      calories
+      score: score,
+      calories,
     };
   }
 
   override async evaluate(): Promise<void> {
     for (const v of this.helper.getInput(InputType.LIST, '') as string[]) {
+      // Process the Input State.
       const matches = v.match(this.parse);
       const ingredient = matches![1]!.toLowerCase();
       const capacity = parseInt(matches![2]!);
@@ -60,6 +67,7 @@ class AOCDay extends AOC {
       const texture = parseInt(matches![5]!);
       const calories = parseInt(matches![6]!);
 
+      // Store Ingredient Properties.
       this.ingredients.set(
         ingredient,
         new STValue({
@@ -73,22 +81,28 @@ class AOCDay extends AOC {
       );
     }
 
+    // Brute force all cookies for the highest score.
     let max = 0;
     for (let sugar = 0; sugar < 100; sugar++) {
       for (let sprinkles = 0; sprinkles < 100 - sugar; sprinkles++) {
         for (let candy = 0; candy < 100 - sugar - sprinkles; candy++) {
           const chocolate = 100 - sugar - sprinkles - candy;
+          // Skip cookies that do not have a recipe total of 100 spoons.
           if ((sugar + sprinkles + candy + chocolate) !== 100) {
             continue;
-          };
+          }
+
+          // Generate cookie.
           const cookie = this.cookie({
             sugar,
             sprinkles,
             candy,
             chocolate,
           });
-          if (Math.max(max, cookie.cookie) > max && cookie.calories === 500) {
-            max = cookie.cookie;
+
+          // Save highest score.
+          if (Math.max(max, cookie.score) > max && cookie.calories === 500) {
+            max = cookie.score;
           }
         }
       }

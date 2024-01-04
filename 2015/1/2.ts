@@ -8,8 +8,8 @@ class AOCDay extends AOC {
     for (const v of this.helper.getInput(InputType.SEPARATED_STRING, '')) {
       if (v === '(') this.store.addNumberToValue(1);
       else this.store.subtractNumberFromValue(1);
-
       this.increment.addNumberToValue(1);
+
       if (this.store.value! < 0) {
         break;
       }

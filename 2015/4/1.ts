@@ -1,7 +1,7 @@
 import { AOC, InputType } from '../../util/state.ts';
 
 import * as standardCrypto from 'https://deno.land/std@0.210.0/crypto/mod.ts';
-import * as standardBytes from "https://deno.land/std@0.210.0/bytes/mod.ts";
+import * as standardBytes from 'https://deno.land/std@0.210.0/bytes/mod.ts';
 import { encodeHex } from 'https://deno.land/std@0.210.0/encoding/hex.ts';
 
 class AOCDay extends AOC {
