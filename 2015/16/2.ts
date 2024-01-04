@@ -36,20 +36,25 @@ class AOCDay extends AOC {
 
   override async evaluate(): Promise<void> {
     for (const v of this.helper.getInput(InputType.LIST, '') as string) {
+      // Process the Input State.
       const matches = v.match(this.parse);
       const id = matches!.slice(1, 2)[0];
       const sue: Partial<AuntSue> = {}
 
+      // Parse the Partial Sue.
       for (const match of matches!.slice(2, matches!.length)) {
         const split = match.split(': ');
         sue[split[0]!] = parseInt(split[1]!);
       }
 
+      // Check if all properties of Partial Sue match a Real Sue.
       let same = true;
       for (const k of Object.keys(sue)) {
+        // Override operation on 'cats' and 'trees'.
         if (k === 'cats' || k === 'trees') {
           same = sue[k]! > this.fingerprint[k]!;
         }
+        // Override operation on 'pomeranians' and 'goldfish'.
         else if (k === 'pomeranians' || k === 'goldfish') {
           same = sue[k]! < this.fingerprint[k]!;
         }
@@ -59,6 +64,7 @@ class AOCDay extends AOC {
         if (same === false) break;
       }
 
+      // If Real Sue is found, save id and break.
       if (same) {
         this.store.value = `${id}`;
         break;

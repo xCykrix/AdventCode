@@ -20,7 +20,7 @@ class AOCDay extends AOC {
   // Regular Expressions.
   private parse = /Sue (\d+): (\w+: \d+), (\w+: \d+), (\w+: \d+)/;
 
-  // Fingerprint
+  // Fingerprint of Real Sue.
   private fingerprint: AuntSue = {
     children: 3,
     cats: 7,
@@ -36,21 +36,25 @@ class AOCDay extends AOC {
 
   override async evaluate(): Promise<void> {
     for (const v of this.helper.getInput(InputType.LIST, '') as string) {
+      // Process the Input State.
       const matches = v.match(this.parse);
       const id = matches!.slice(1, 2)[0];
       const sue: Partial<AuntSue> = {}
 
+      // Parse the Partial Sue.
       for (const match of matches!.slice(2, matches!.length)) {
         const split = match.split(': ');
         sue[split[0]!] = parseInt(split[1]!);
       }
 
+      // Check if all properties of Partial Sue match a Real Sue.
       let same = true;
       for (const k of Object.keys(sue)) {
         same = this.fingerprint[k] === sue[k];
         if (same === false) break;
       }
 
+      // If Real Sue is found, save id and break.
       if (same) {
         this.store.value = `${id}`;
         break;
