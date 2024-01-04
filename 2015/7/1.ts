@@ -67,20 +67,3 @@ class AOCDay extends AOC {
 // // Execute AOC.
 const aoc = new AOCDay();
 await aoc.execute();
-
-
-  //   b?.start();
-  //   for (const v of this.inputAsList) {
-  //     generateWireCache(v);
-  //   }
-  //   const aToB = calculateWire('a')!;
-  //   defaultCache.deleteAll();
-  //   for (const v of this.inputAsList) {
-  //     generateWireCache(v);
-  //   }
-  //   defaultCache.setValue('b', aToB);
-
-  //   resultStorage.set(`${calculateWire('a')}`);
-  //   b?.end();
-
-  // }

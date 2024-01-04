@@ -47,6 +47,10 @@ export class InputCursor {
     return this.list[this.position - 1] ?? null;
   }
 
+  public getAt(index: number): string | null {
+    return this.list[index] ?? null;
+  }
+
   public getAsString(): string {
     return this.list.join('');
   }
