@@ -1,8 +1,8 @@
 import { AOC, InputType } from '../../util/state.ts';
 
 class AOCDay extends AOC {
-  private store = this.storage.getValueStorage<string>(this.helper.getInput(InputType.STRING, '') as string);
-  private cache = this.storage.getValueStorage<string>('');
+  private store = this.storage.makeStoredValue<string>(this.helper.getInput(InputType.STRING, '') as string);
+  private cache = this.storage.makeStoredValue<string>('');
 
   // Regular Expressions
   private parse = /(\d)\1*/g;
@@ -10,21 +10,21 @@ class AOCDay extends AOC {
   override async evaluate(): Promise<void> {
     // Loop 40 Times.
     for (let i = 0; i < 40; i++) {
-      const stored = this.store.getValueAsString()!;
+      const stored = this.store.toString()!;
 
       // Take global regex matches of groups of numbers.
       const match = stored.match(this.parse);
       // Process the length of the matches and concat the length + original number.
       for (const m of match!) {
-        this.cache.value += m.length + m.split('')[0]!;
+        this.cache.set(this.store.get() + m.length + m.split('')[0]!);
       }
       // Store value and reset cache.
-      this.store.value = this.cache.value;
-      this.cache.value = '';
+      this.store.get = this.cache.get;
+      this.cache.set('');
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = `${this.store.value!.length}`;
+    this.storage.makeStoredValue('Unknown', 'value').set(`${this.store.get!.length}`);
   }
 }
 

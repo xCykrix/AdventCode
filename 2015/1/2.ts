@@ -1,22 +1,26 @@
 import { AOC, InputType } from '../../util/state.ts';
 
 class AOCDay extends AOC {
-  private store = this.storage.getValueStorage<number>(0);
-  private increment = this.storage.getValueStorage<number>(0);
+  private store = this.storage.makeStoredValue<number>(0);
+  private counter = this.storage.makeStoredValue<number>(0);
 
   override async evaluate(): Promise<void> {
     for (const v of this.helper.getInput(InputType.SEPARATED_STRING, '')) {
-      if (v === '(') this.store.addNumberToValue(1);
-      else this.store.subtractNumberFromValue(1);
-      this.increment.addNumberToValue(1);
+      // Process the input.
+      if (v === '(') this.store.add(1);
+      else this.store.subtract(1);
 
-      if (this.store.value! < 0) {
+      // Increment the counter.
+      this.counter.add(1);
+
+      // If we enter the basement, break.
+      if (this.store.get() < 0) {
         break;
       }
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = this.increment.getValueAsString();
+    this.storage.makeStoredValue('Unknown', 'value').set(this.counter.toString());
   }
 }
 

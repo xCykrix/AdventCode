@@ -1,41 +1,65 @@
-import { AOC, InputType } from '../../util/state.ts';
+import { AOC, InputType, StoreValue } from '../../util/state.ts';
 
 class AOCDay extends AOC {
-  private map = this.storage.getMapStorage<number>();
+  private map = this.storage.makeStoredMap<boolean>();
 
-  // Regular Expressions
-  private parse = /(turn on|turn off|toggle) (\d+),(\d+) through (\d+),(\d+)/;
-
-  override async evaluate(): Promise<void> {
-    for (const v of this.helper.getInput(InputType.LIST, '') as string) {
-      // Parse Light Update State.
-      let [action, x1, y1, x2, y2] = ['off', 0, 0, 0, 0];
-      const match = v.match(this.parse);
-      action = match![1]!;
-      x1 = parseInt(match![2]!);
-      y1 = parseInt(match![3]!);
-      x2 = parseInt(match![4]!);
-      y2 = parseInt(match![5]!);
-
-      // Iterate over the 2d Plane and Update Lights.
-      for (let cx = x1; cx <= x2; cx++) {
-        for (let cy = y1; cy <= y2; cy++) {
-          if (action === 'turn on') {
-            this.map.addIntegerToValue(`${cx}:${cy}`, 1);
-          }
-          if (action === 'turn off') {
-            if ((this.map.get(`${cx}:${cy}`)?.value ?? 0) <= 0) continue;
-            this.map.subtractIntegerFromValue(`${cx}:${cy}`, 1);
-          }
-          if (action === 'toggle') {
-            this.map.addIntegerToValue(`${cx}:${cy}`, 2);
-          }
+  private getNextState(x: number, y: number): number {
+    let count = this.map.get(`${x}:${y}`)!.get() === true ? -1 : 0;
+    for (let ty = 0; ty < 3; ty++) {
+      for (let tx = 0; tx < 3; tx++) {
+        if (this.map.get(`${x + tx - 1}:${y + ty - 1}`)?.get()) {
+          count++;
         }
       }
     }
+    return count;
+  }
+
+  override async evaluate(): Promise<void> {
+    let y = 0;
+    for (const v of this.helper.getInput(InputType.SEPARATED_LIST, '') as string[][]) {
+      let x = 0;
+      for (const state of v) {
+        this.map.set(`${x}:${y}`, new StoreValue((state === "#") ? true : false));
+        x++;
+      }
+      y++;
+    }
+
+    for (let _ = 0; _ < 100; _++) {
+      let updates: [string, boolean][] = [];
+
+      // Update Hardcoded States
+      this.map.set('0:0', new StoreValue(true));
+      this.map.set('0:99', new StoreValue(true));
+      this.map.set('99:0', new StoreValue(true));
+      this.map.set('99:99', new StoreValue(true));
+
+      for (let y = 0; y < 100; y++) {
+        for (let x = 0; x < 100; x++) {
+          const current = this.map.get(`${x}:${y}`)!.get();
+          const next = this.getNextState(x, y);
+          if (current === true) {
+            if (next === 2 || next === 3) {
+              updates.push([`${x}:${y}`, true]);
+            } else {
+              updates.push([`${x}:${y}`, false]);
+            }
+          } else if (next === 3) {
+            updates.push([`${x}:${y}`, true]);
+          }
+        }
+      }
+      updates.push(['0:0', true], ['99:0', true], ['0:99', true], ['99:99', true]);
+
+      for (const update of updates) {
+        this.map.set(update[0], new StoreValue(update[1]));
+      }
+      updates = [];
+    }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = Array.from(this.map.values()).reduce((a, v) => a + v.value!, 0).toString();
+    this.storage.makeStoredValue('Unknown', 'value').set(`${Array.from(this.map.values()).filter((v) => v.get() === true).length.toString()}`);
   }
 }
 

@@ -1,7 +1,7 @@
 import { AOC, InputType } from '../../util/state.ts';
 
 class AOCDay extends AOC {
-  private map = this.storage.getMapStorage<number>();
+  private map = this.storage.makeStoredMap<number>();
 
   // Regular Expressions
   private parse = /(turn on|turn off|toggle) (\d+),(\d+) through (\d+),(\d+)/;
@@ -24,7 +24,7 @@ class AOCDay extends AOC {
             this.map.addIntegerToValue(`${cx}:${cy}`, 1);
           }
           if (action === 'turn off') {
-            if ((this.map.get(`${cx}:${cy}`)?.value ?? 0) <= 0) continue;
+            if ((this.map.get(`${cx}:${cy}`)?.get() ?? 0) <= 0) continue;
             this.map.subtractIntegerFromValue(`${cx}:${cy}`, 1);
           }
           if (action === 'toggle') {
@@ -35,7 +35,9 @@ class AOCDay extends AOC {
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = Array.from(this.map.values()).reduce((a, v) => a + v.value!, 0).toString();
+    this.storage.makeStoredValue('Unknown', 'value').set(
+     `${Array.from(this.map.values()).reduce((a, v) => a + v.get(), 0)}`
+    );
   }
 }
 

@@ -3,7 +3,6 @@ import { AOC, InputType } from '../../util/state.ts';
 class AOCDay extends AOC {
   private count(object: Record<string, unknown>): number {
     let identifiers: unknown[] = [];
-    // Recursively scan for objects and arrays to get numbers.
 
     // Check if the object is an array or object.
     if (Array.isArray(object)) {
@@ -38,7 +37,7 @@ class AOCDay extends AOC {
     const count = this.count(parse);
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = `${count}`;
+    this.storage.makeStoredValue('Unknown', 'value').set(`${count}`);
   }
 }
 

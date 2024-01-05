@@ -4,7 +4,7 @@ import * as standardCrypto from 'https://deno.land/std@0.210.0/crypto/mod.ts';
 import * as standardBytes from 'https://deno.land/std@0.210.0/bytes/mod.ts';
 
 class AOCDay extends AOC {
-  private store = this.storage.getValueStorage<number>(0);
+  private store = this.storage.makeStoredValue<number>(0);
 
   override async evaluate(): Promise<void> {
     const uint8Compare = new Uint8Array([0, 0, 0]);
@@ -21,7 +21,7 @@ class AOCDay extends AOC {
       // Check with full byte comparison. Possible due to 000000 as prefix instead of 00000 for Part 1.
       const buffer = new Uint8Array(md5hash);
       if (!standardBytes.startsWith(buffer, uint8Compare)) {
-        this.store.addNumberToValue(1);
+        this.store.add(1);
         continue;
       }
 
@@ -29,7 +29,7 @@ class AOCDay extends AOC {
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = this.store.getValueAsString();
+    this.storage.makeStoredValue('Unknown', 'value').set(this.store.toString());
   }
 }
 

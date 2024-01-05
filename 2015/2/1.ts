@@ -1,7 +1,7 @@
 import { AOC, InputType } from '../../util/state.ts';
 
 class AOCDay extends AOC {
-  private store = this.storage.getValueStorage<number>(0);
+  private store = this.storage.makeStoredValue<number>(0);
 
   override async evaluate(): Promise<void> {
     for (const v of this.helper.getInput(InputType.SEPARATED_LIST, 'x')) {
@@ -16,14 +16,14 @@ class AOCDay extends AOC {
       const hl = h * l;
 
       // Sort the shortest sides.
-      const ordered = [lw, wh, hl].sort((a, b) => a - b);
+      const ordered = Math.min(...[lw, wh, hl]);
 
       // Add to result.
-      this.store.addNumberToValue(ordered[0]! + ((2 * lw) + (2 * wh) + (2 * hl)));
+      this.store.add(ordered + ((2 * lw) + (2 * wh) + (2 * hl)));
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = this.store.getValueAsString();
+    this.storage.makeStoredValue('Unknown', 'value').set(this.store.toString());
   }
 }
 

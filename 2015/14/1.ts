@@ -1,4 +1,4 @@
-import { AOC, InputType, STValue } from '../../util/state.ts';
+import { AOC, InputType, StoreValue } from '../../util/state.ts';
 
 // Hardcoded Input: FlightDuration
 const duration = 2503;
@@ -12,8 +12,8 @@ interface Reindeer {
 }
 
 class AOCDay extends AOC {
-  private roster = this.storage.getMapStorage<Reindeer>();
-  private distance = this.storage.getMapStorage<number>();
+  private roster = this.storage.makeStoredMap<Reindeer>();
+  private distance = this.storage.makeStoredMap<number>();
   private unique = new Set<string>();
 
   // Regular Expressions.
@@ -31,7 +31,7 @@ class AOCDay extends AOC {
       // Store to Roster.
       this.roster.set(
         name,
-        new STValue({
+        new StoreValue({
           speed,
           maxDuration,
           restDuration,
@@ -39,7 +39,7 @@ class AOCDay extends AOC {
           isResting: false,
         }),
       );
-      this.distance.set(name, new STValue(0));
+      this.distance.set(name, new StoreValue(0));
 
       // Store Unique Names of Reindeer.
       this.unique.add(name);
@@ -48,7 +48,7 @@ class AOCDay extends AOC {
     // Run a for loop of each 'tick' of the game.
     for (let i = 0; i < duration; i++) {
       this.unique.forEach((name) => {
-        const reindeer = this.roster.get(name)!.value!;
+        const reindeer = this.roster.get(name)!.get();
         if (!reindeer.isResting) {
           // Reindeer is active. Tick game and wait for sleep state.
           this.distance.addIntegerToValue(name, reindeer.speed);
@@ -69,7 +69,7 @@ class AOCDay extends AOC {
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = `${Math.max(...(Array.from(this.distance.values()).map((value) => value.value!)))}`;
+    this.storage.makeStoredValue('Unknown', 'value').set(`${Math.max(...(Array.from(this.distance.values()).map((value) => value.get())))}`);
   }
 }
 

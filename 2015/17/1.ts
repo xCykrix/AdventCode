@@ -2,25 +2,25 @@ import { AOC, InputType } from '../../util/state.ts';
 import { combinations } from 'https://deno.land/x/combinatorics@1.1.2/mod.ts';
 
 class AOCDay extends AOC {
-  private store = this.storage.getValueStorage<number[]>([]);
-  private count = this.storage.getValueStorage<number>(0);
+  private store = this.storage.makeStoredValue<number[]>([]);
+  private count = this.storage.makeStoredValue<number>(0);
 
   override async evaluate(): Promise<void> {
     for (const v of this.helper.getInput(InputType.LIST, '') as string) {
-      this.store.value!.push(parseInt(v));
+      this.store.get().push(parseInt(v));
     }
 
-    for (let i = 1; i < this.store.value!.length - 1; i++) {
-      for (const combination of combinations(this.store.value!, i)) {
+    for (let i = 1; i < this.store.get!.length - 1; i++) {
+      for (const combination of combinations(this.store.get(), i)) {
         const totalSize = combination.reduce((i, container) => i = i + container, 0);
         if (totalSize === 150) {
-          this.count.value! = this.count.value! + 1;
+          this.count.add(1);
         }
       }
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = this.count.getValueAsString();
+    this.storage.makeStoredValue('Unknown', 'value').set(`${this.count.toString()}`);
   }
 }
 

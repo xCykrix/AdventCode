@@ -1,7 +1,7 @@
-import { AOC, InputType, STValue } from '../../util/state.ts';
+import { AOC, InputType, StoreValue } from '../../util/state.ts';
 
 class AOCDay extends AOC {
-  private map = this.storage.getMapStorage<boolean>();
+  private map = this.storage.makeStoredMap<boolean>();
 
   // Regular Expressions
   private parse = /(turn on|turn off|toggle) (\d+),(\d+) through (\d+),(\d+)/;
@@ -21,17 +21,17 @@ class AOCDay extends AOC {
       for (let cx = x1; cx <= x2; cx++) {
         for (let cy = y1; cy <= y2; cy++) {
           if (action === 'turn on') {
-            this.map.set(`${cx}:${cy}`, new STValue(true));
+            this.map.set(`${cx}:${cy}`, new StoreValue(true));
           }
           if (action === 'turn off') {
-            this.map.set(`${cx}:${cy}`, new STValue(false));
+            this.map.set(`${cx}:${cy}`, new StoreValue(false));
           }
           if (action === 'toggle') {
             if (this.map.has(`${cx}:${cy}`)) {
               const ref = this.map.get(`${cx}:${cy}`)!;
-              ref.value = !ref.value;
+              ref.set(!ref.get());
             } else {
-              this.map.set(`${cx}:${cy}`, new STValue(true));
+              this.map.set(`${cx}:${cy}`, new StoreValue(true));
             }
           }
         }
@@ -39,7 +39,9 @@ class AOCDay extends AOC {
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = Array.from(this.map.values()).filter((v) => v.value === true).length.toString();
+    this.storage.makeStoredValue('Unknown', 'value').set(
+      `${Array.from(this.map.values()).filter((v) => v.get() === true).length}`
+    );
   }
 }
 

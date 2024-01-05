@@ -15,7 +15,7 @@ interface AuntSue {
 }
 
 class AOCDay extends AOC {
-  private store = this.storage.getValueStorage<string>('Unknown');
+  private store = this.storage.makeStoredValue<string>('Unknown');
 
   // Regular Expressions.
   private parse = /Sue (\d+): (\w+: \d+), (\w+: \d+), (\w+: \d+)/;
@@ -66,13 +66,13 @@ class AOCDay extends AOC {
 
       // If Real Sue is found, save id and break.
       if (same) {
-        this.store.value = `${id}`;
+        this.store.set(`${id}`);
         break;
       }
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = this.store.getValueAsString();
+    this.storage.makeStoredValue('Unknown', 'value').set(`${this.store.toString()}`);
   }
 }
 

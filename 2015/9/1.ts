@@ -1,10 +1,10 @@
 import { InputCursor } from '../../util/input.ts';
-import { AOC, InputType, STValue } from '../../util/state.ts';
+import { AOC, InputType, StoreValue } from '../../util/state.ts';
 import { permutations } from 'https://deno.land/x/combinatorics@1.1.2/mod.ts';
 
 class AOCDay extends AOC {
-  private map = this.storage.getMapStorage<number>();
-  private store = this.storage.getValueStorage<number>(Infinity);
+  private map = this.storage.makeStoredMap<number>();
+  private store = this.storage.makeStoredValue<number>(Infinity);
   private unique = new Set<string>();
 
   // Regular Expressions
@@ -18,8 +18,8 @@ class AOCDay extends AOC {
       const end = match![2]!;
       const distance = parseInt(match![3]!);
       // Add start:end and end:start with distance.
-      this.map.set(`${start}:${end}`, new STValue(distance));
-      this.map.set(`${end}:${start}`, new STValue(distance));
+      this.map.set(`${start}:${end}`, new StoreValue(distance));
+      this.map.set(`${end}:${start}`, new StoreValue(distance));
       // Add unique list.
       this.unique.add(start);
       this.unique.add(end);
@@ -37,15 +37,15 @@ class AOCDay extends AOC {
         if (next === null) continue;
 
         // Add the Distance of the Next Step Lookup.
-        distance += this.map.get(`${current}:${next}`)!.value!;
+        distance += this.map.get(`${current}:${next}`)!.get();
       }
 
       // Store the Minimum Distance.
-      this.store.value = Math.min(distance, this.store.value!);
+      this.store.set(Math.min(distance, this.store.get()));
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = `${this.store.value}`;
+    this.storage.makeStoredValue('Unknown', 'value').set(`${this.store.get()}`);
   }
 }
 

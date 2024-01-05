@@ -1,30 +1,30 @@
-import { AOC, InputType, STValue } from '../../util/state.ts';
+import { AOC, InputType, StoreValue } from '../../util/state.ts';
 
 class AOCDay extends AOC {
-  private map = this.storage.getMapStorage<number>();
-  private x = this.storage.getValueStorage<number>(0);
-  private y = this.storage.getValueStorage<number>(0);
+  private map = this.storage.makeStoredMap<number>();
+  private x = this.storage.makeStoredValue<number>(0);
+  private y = this.storage.makeStoredValue<number>(0);
 
   override async evaluate(): Promise<void> {
-    this.map.set(`0:0`, new STValue<number>(1));
+    this.map.set(`0:0`, new StoreValue<number>(1));
 
     for (const v of this.helper.getInput(InputType.SEPARATED_STRING, '')) {
-      // Process the ^ v < > characters as +1 and -1 in a 2d plane.
+      // Process the input (^ v < >) characters in 2d plane.
       switch (v) {
         case '^': {
-          this.y.addNumberToValue(1);
+          this.y.add(1);
           break;
         }
         case 'v': {
-          this.y.subtractNumberFromValue(1);
+          this.y.subtract(1);
           break;
         }
         case '>': {
-          this.x.addNumberToValue(1);
+          this.x.add(1);
           break;
         }
         case '<': {
-          this.x.subtractNumberFromValue(1);
+          this.x.subtract(1);
           break;
         }
       }
@@ -34,7 +34,7 @@ class AOCDay extends AOC {
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage(0, 'value').value = this.map.size;
+    this.storage.makeStoredValue('Unknown', 'value').set(`${this.map.size}`);
   }
 }
 

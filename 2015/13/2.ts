@@ -1,10 +1,10 @@
 import { InputCursor } from '../../util/input.ts';
-import { AOC, InputType, STValue } from '../../util/state.ts';
+import { AOC, InputType, StoreValue } from '../../util/state.ts';
 import { permutations } from 'https://deno.land/x/combinatorics@1.1.2/mod.ts';
 
 class AOCDay extends AOC {
-  private map = this.storage.getMapStorage<number>();
-  private store = this.storage.getValueStorage<number>(0);
+  private map = this.storage.makeStoredMap<number>();
+  private store = this.storage.makeStoredValue<number>(0);
   private unique = new Set<string>();
 
   // Regular Expressions
@@ -20,7 +20,7 @@ class AOCDay extends AOC {
       const person2 = match![4]!;
 
       // Set the happiness units.
-      this.map.set(`${person1}:${person2}`, new STValue(happiness));
+      this.map.set(`${person1}:${person2}`, new StoreValue(happiness));
 
       // Store each unique person.
       this.unique.add(person1);
@@ -45,18 +45,16 @@ class AOCDay extends AOC {
         }
 
         // Add Happiness Changes of Current and Next Person. Last person uses first position.
-        happiness += (this.map.get(`${current}:${next}`)?.value) ?? 0;
-        happiness += (this.map.get(`${next}:${current}`)?.value) ?? 0;
+        happiness += (this.map.get(`${current}:${next}`)?.get()) ?? 0;
+        happiness += (this.map.get(`${next}:${current}`)?.get()) ?? 0;
       }
 
       // Store max happiness.
-      if (happiness > this.store.value!) {
-        this.store.value = Math.max(happiness, this.store.value!);
-      }
+      this.store.set(Math.max(happiness, this.store.get()));
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = `${this.store.value}`;
+    this.storage.makeStoredValue('Unknown', 'value').set(`${this.store.get()}`);
   }
 }
 

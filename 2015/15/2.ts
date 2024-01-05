@@ -1,4 +1,4 @@
-import { AOC, InputType, STValue } from '../../util/state.ts';
+import { AOC, InputType, StoreValue } from '../../util/state.ts';
 
 interface Ingredient {
   ingredient: string;
@@ -18,7 +18,7 @@ interface Recipe {
 }
 
 class AOCDay extends AOC {
-  private ingredients = this.storage.getMapStorage<Ingredient>();
+  private ingredients = this.storage.makeStoredMap<Ingredient>();
 
   // Regular Expressions.
   private parse = /(.*): capacity (-?\d+), durability (-?\d+), flavor (-?\d+), texture (-?\d+), calories (-?\d+)/;
@@ -32,14 +32,14 @@ class AOCDay extends AOC {
 
     // Process each ingredient.
     for (const ingredient of this.ingredients.values()) {
-      const spoons = recipe[ingredient.value!.ingredient!]!;
-      capacity = capacity + (spoons * ingredient.value!.capacity);
-      durability = durability + (spoons * ingredient.value!.durability);
-      flavor = flavor + (spoons * ingredient.value!.flavor);
-      texture = texture + (spoons * ingredient.value!.texture);
+      const spoons = recipe[ingredient.get().ingredient!]!;
+      capacity = capacity + (spoons * ingredient.get().capacity);
+      durability = durability + (spoons * ingredient.get().durability);
+      flavor = flavor + (spoons * ingredient.get().flavor);
+      texture = texture + (spoons * ingredient.get().texture);
 
       // Add calories.
-      calories = calories + (spoons * ingredient.value!.calories);
+      calories = calories + (spoons * ingredient.get().calories);
     }
 
     // If ingredient score is negative, revert to 0.
@@ -70,7 +70,7 @@ class AOCDay extends AOC {
       // Store Ingredient Properties.
       this.ingredients.set(
         ingredient,
-        new STValue({
+        new StoreValue({
           ingredient,
           capacity,
           durability,
@@ -109,7 +109,7 @@ class AOCDay extends AOC {
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = `${max}`;
+    this.storage.makeStoredValue('Unknown', 'value').set(`${max}`);
   }
 }
 

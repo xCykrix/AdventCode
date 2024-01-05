@@ -50,7 +50,7 @@ class AOCDay extends AOC {
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = `${v}`;
+    this.storage.makeStoredValue('Unknown', 'value').set(`${v}`);
   }
 }
 

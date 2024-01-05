@@ -1,4 +1,4 @@
-import { AOC, InputType, STValue } from '../../util/state.ts';
+import { AOC, InputType, StoreValue } from '../../util/state.ts';
 import { uint16 } from '../../util/number/uint16.ts';
 
 type WireOperation = 'AND' | 'OR' | 'NOT' | 'LSHIFT' | 'RSHIFT';
@@ -15,7 +15,7 @@ class AOCDay extends AOC {
     'LSHIFT': (n1: number, n2: number) => uint16(n1 << n2),
     'RSHIFT': (nq: number, n2: number) => uint16(nq >> n2),
   };
-  private map = this.storage.getMapStorage<number | Wire>();
+  private map = this.storage.makeStoredMap<number | Wire>();
 
   // Regular Expressions
   private operationRegex = /[A-Z]+/g;
@@ -25,7 +25,7 @@ class AOCDay extends AOC {
     if (typeof v === 'number') return v;
 
     // Validate the wire types and return if a number is found and error if a null is found.
-    const wire = this.map.get(v ?? '')?.value ?? null;
+    const wire = this.map.get(v ?? '')?.get() ?? null;
     if (typeof wire === 'number') return wire;
     if (wire === null || v === null || wire === undefined || v === undefined) {
       throw new Error('getWireState(): encountered a null or undefined where not expected');
@@ -33,12 +33,12 @@ class AOCDay extends AOC {
 
     // Recursively search dependencies and calculate the wire state until a number is returned.
     if (wire.operation === null) {
-      this.map.set(v, new STValue(this.getWireState(wire.args[0]!)));
+      this.map.set(v, new StoreValue(this.getWireState(wire.args[0]!)));
     } else {
-      this.map.set(v, new STValue(this.bitwise[wire.operation](this.getWireState(wire.args[0]!), this.getWireState(wire.args[1]!))));
+      this.map.set(v, new StoreValue(this.bitwise[wire.operation](this.getWireState(wire.args[0]!), this.getWireState(wire.args[1]!))));
     }
 
-    return this.map.get(v)!.value as number;
+    return this.map.get(v)!.get() as number;
   }
 
   private setWireState(v: string): void {
@@ -50,7 +50,7 @@ class AOCDay extends AOC {
     // Write to Wire Cache.
     this.map.set(
       destination,
-      new STValue({
+      new StoreValue({
         operation,
         args,
       }),
@@ -67,7 +67,7 @@ class AOCDay extends AOC {
     const a = this.getWireState('a');
 
     // Store Result of AOC.
-    this.storage.getValueStorage('Unknown', 'value').value = `${a}`;
+    this.storage.makeStoredValue('Unknown', 'value').set(`${a}`);
   }
 }
 

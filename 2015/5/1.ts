@@ -1,9 +1,9 @@
 import { InputCursor } from '../../util/input.ts';
-import { AOC, InputType, STValue } from '../../util/state.ts';
+import { AOC, InputType, StoreValue } from '../../util/state.ts';
 
 class AOCDay extends AOC {
-  private map = this.storage.getMapStorage<boolean>();
-  private cache = this.storage.getMapStorage<number>();
+  private map = this.storage.makeStoredMap<boolean>();
+  private cache = this.storage.makeStoredMap<number>();
 
   override async evaluate(): Promise<void> {
     const blacklisted = ['ab', 'cd', 'pq', 'xy'];
@@ -42,19 +42,20 @@ class AOCDay extends AOC {
       // Rule 1: At Least 3 Vowels.
       let totalVowels = 0;
       for (const vowel of vowels) {
-        totalVowels += this.cache.get(vowel)?.value ?? 0;
+        totalVowels += this.cache.get(vowel)?.get() ?? 0;
       }
       if (totalVowels >= 3) {
         hasThreeVowels = true;
       }
 
+      // Check Validation
       if (hasTwiceInRow && hasThreeVowels) {
-        this.map.set(cursor.getAsString(), new STValue(true));
+        this.map.set(cursor.getAsString(), new StoreValue(true));
       }
     }
 
     // Store Result of AOC.
-    this.storage.getValueStorage(0, 'value').value = this.map.size;
+    this.storage.makeStoredValue('Unknown', 'value').set(`${this.map.size}`);
   }
 }
 
