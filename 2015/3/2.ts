@@ -12,7 +12,7 @@ class AOCDay extends AOC {
     this.map.set(`0:0`, new StoreValue<number>(1));
 
     for (const v of this.helper.getInput(InputType.SEPARATED_STRING, '')) {
-      // Process the ^ v < > characters as +1 and -1 in a 2d plane.
+      // Process the input (^ v < >) characters in 2d plane.
       // Split apart the Santa and Robot-Santa steps.
       switch (v) {
         case '^': {

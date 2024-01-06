@@ -10,7 +10,7 @@ class AOCDay extends AOC {
       this.store.get().push(parseInt(v));
     }
 
-    for (let i = 1; i < this.store.get!.length - 1; i++) {
+    for (let i = 1; i < this.store.get().length - 1; i++) {
       for (const combination of combinations(this.store.get(), i)) {
         const totalSize = combination.reduce((i, container) => i = i + container, 0);
         if (totalSize === 150) {
