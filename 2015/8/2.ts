@@ -21,6 +21,6 @@ class AOCDay extends AOC {
   }
 }
 
-// // Execute AOC.
+// Execute AOC.
 const aoc = new AOCDay();
 await aoc.execute();

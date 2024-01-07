@@ -37,10 +37,10 @@ class AOCDay extends AOC {
         }
       }
 
-      // Store the present being delivered to point by either Santa or Robot-Santa.
+      // Store the present being delivered to point by Santa or Robot-Santa.
       this.map.addIntegerToValue(this.step.get() ? `${this.sx}:${this.sy}` : `${this.rx}:${this.ry}`, 1);
 
-      // Toggle the Turn Step State.
+      // Toggle the Step State.
       this.step.toggle();
     }
 
@@ -49,6 +49,6 @@ class AOCDay extends AOC {
   }
 }
 
-// // Execute AOC.
+// Execute AOC.
 const aoc = new AOCDay();
 await aoc.execute();

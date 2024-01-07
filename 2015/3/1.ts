@@ -29,7 +29,7 @@ class AOCDay extends AOC {
         }
       }
 
-      // Store the present being delivered to point.
+      // Store the present being delivered by Santa.
       this.map.addIntegerToValue(`${this.x}:${this.y}`, 1);
     }
 
@@ -38,6 +38,6 @@ class AOCDay extends AOC {
   }
 }
 
-// // Execute AOC.
+// Execute AOC.
 const aoc = new AOCDay();
 await aoc.execute();
