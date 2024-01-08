@@ -14,22 +14,29 @@ export abstract class AOC {
   abstract evaluate(): Promise<void>;
 }
 
+interface InputRefType {
+  [InputType.STRING]: string;
+  [InputType.SEPARATED_STRING]: string[];
+  [InputType.LIST]: string[];
+  [InputType.SEPARATED_LIST]: string[][];
+}
+
 export class AOCHelper {
-  public getInput(inputType: InputType, separator?: string): string | string[] | string[][] {
-    switch (inputType) {
-      case InputType.STRING: {
+  public getInput<T extends InputType>(inputType: T, separator?: string): InputRefType[T] {
+    return {
+      get [InputType.STRING]() {
         return getInputAsString('./input');
-      }
-      case InputType.SEPARATED_STRING: {
-        return getInputAsSeparatedString('./input', separator);
-      }
-      case InputType.LIST: {
+      },
+      get [InputType.SEPARATED_STRING]() {
+        return getInputAsSeparatedString('./input', separator ?? '');
+      },
+      get [InputType.LIST]() {
         return getInputAsList('./input');
+      },
+      get [InputType.SEPARATED_LIST]() {
+        return getInputAsSeparatedList('./input', separator ?? '');
       }
-      case InputType.SEPARATED_LIST: {
-        return getInputAsSeparatedList('./input', separator);
-      }
-    }
+    }[inputType];
   }
 }
 
@@ -97,8 +104,8 @@ export class StoreValue<T = unknown> {
 }
 
 export enum InputType {
-  STRING,
-  SEPARATED_STRING,
-  LIST,
-  SEPARATED_LIST,
+  STRING = 'STRING',
+  SEPARATED_STRING = 'SEPARATED_STRING',
+  LIST = 'LIST',
+  SEPARATED_LIST = 'SEPARATED_LIST',
 }
