@@ -21,7 +21,7 @@ class AOCDay extends AOC {
   override async evaluate(): Promise<void> {
     let y = 0;
     // Process the input.
-    for (const v of this.helper.getInput(InputType.SEPARATED_LIST, '') as string[][]) {
+    for (const v of this.helper.getInput(InputType.SEPARATED_LIST, '')) {
       let x = 0;
       for (const state of v) {
         this.map.set(`${x}:${y}`, new StoreValue((state === '#') ? true : false));
