@@ -1,4 +1,5 @@
-import { AOC, InputType, StoreValue } from '../../util/state.ts';
+import { AOC } from '../../util/state.ts';
+import { InputType, StoreValue } from '../../util/storage.ts';
 
 interface Ingredient {
   ingredient: string;

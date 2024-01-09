@@ -1,4 +1,5 @@
-import { AOC, InputType } from '../../util/state.ts';
+import { AOC } from '../../util/state.ts';
+import { InputType } from '../../util/storage.ts';
 
 class AOCDay extends AOC {
   private map = this.storage.makeStoredMap<number>();
@@ -7,7 +8,7 @@ class AOCDay extends AOC {
   private parse = /(turn on|turn off|toggle) (\d+),(\d+) through (\d+),(\d+)/;
 
   override async evaluate(): Promise<void> {
-    for (const v of this.helper.getInput(InputType.LIST, '') as string) {
+    for (const v of this.helper.getInput(InputType.LIST, '')) {
       // Parse Light Update State.
       let [action, x1, y1, x2, y2] = ['off', 0, 0, 0, 0];
       const match = v.match(this.parse);

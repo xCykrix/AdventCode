@@ -1,23 +1,24 @@
-import { AOC, InputType } from '../../util/state.ts';
+import { AOC } from '../../util/state.ts';
+import { InputType } from '../../util/storage.ts';
 
 class AOCDay extends AOC {
-  private store1 = this.storage.makeStoredValue<number>(0);
-  private store2 = this.storage.makeStoredValue<number>(0);
+  private start = this.storage.makeStoredValue<number>(0);
+  private end = this.storage.makeStoredValue<number>(0);
 
   override async evaluate(): Promise<void> {
-    for (let v of this.helper.getInput(InputType.LIST, '') as string) {
+    for (let v of this.helper.getInput(InputType.LIST)) {
       // Add String Length to store1.
-      this.store1.add(v.length);
+      this.start.add(v.length);
 
       // Stringify the input to escape the needed characters.
       v = JSON.stringify(v);
 
       // Add String Length to store2 after JSON Stringify.
-      this.store2.add(v.length);
+      this.end.add(v.length);
     }
 
     // Store Result of AOC.
-    this.storage.makeStoredValue('Unknown', 'value').set(`${(this.store2.get() - this.store1.get())}`);
+    this.storage.makeStoredValue('Unknown', 'value').set(`${Math.abs(this.end.get() - this.start.get())}`);
   }
 }
 

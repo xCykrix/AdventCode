@@ -1,4 +1,5 @@
-import { AOC, InputType, StoreValue } from '../../util/state.ts';
+import { AOC } from '../../util/state.ts';
+import { InputType, StoreValue } from '../../util/storage.ts';
 import { uint16 } from '../../util/number/uint16.ts';
 
 type WireOperation = 'AND' | 'OR' | 'NOT' | 'LSHIFT' | 'RSHIFT';
@@ -8,6 +9,9 @@ interface Wire {
 }
 
 class AOCDay extends AOC {
+  private map = this.storage.makeStoredMap<number | Wire>();
+
+  // Fast bitwise helper functions.
   private bitwise = {
     'AND': (n1: number, n2: number) => uint16(n1 & n2),
     'OR': (n1: number, n2: number) => uint16(n1 | n2),
@@ -15,7 +19,6 @@ class AOCDay extends AOC {
     'LSHIFT': (n1: number, n2: number) => uint16(n1 << n2),
     'RSHIFT': (nq: number, n2: number) => uint16(nq >> n2),
   };
-  private map = this.storage.makeStoredMap<number | Wire>();
 
   // Regular Expressions
   private operationRegex = /[A-Z]+/g;
@@ -59,7 +62,7 @@ class AOCDay extends AOC {
 
   override async evaluate(): Promise<void> {
     // Generate the Wire Cache.
-    for (const v of this.helper.getInput(InputType.LIST, '') as string) {
+    for (const v of this.helper.getInput(InputType.LIST)) {
       this.setWireState(v);
     }
     // Calculate 'b' override from 'a'.
@@ -68,7 +71,7 @@ class AOCDay extends AOC {
     this.map.clear();
 
     // Generate the Wire Cache.
-    for (const v of this.helper.getInput(InputType.LIST, '') as string) {
+    for (const v of this.helper.getInput(InputType.LIST)) {
       this.setWireState(v);
     }
     // Override 'b' with 'a' result from first iteration.

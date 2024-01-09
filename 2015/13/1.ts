@@ -1,5 +1,6 @@
-import { InputCursor } from '../../util/InputCursor.ts';
-import { AOC, InputType, StoreValue } from '../../util/state.ts';
+import { ArrayCursor } from '../../util/arrayCursor.ts';
+import { AOC } from '../../util/state.ts';
+import { InputType, StoreValue } from '../../util/storage.ts';
 import { permutations } from 'https://deno.land/x/combinatorics@1.1.2/mod.ts';
 
 class AOCDay extends AOC {
@@ -29,7 +30,7 @@ class AOCDay extends AOC {
 
     for (const permutation of permutations(Array.from(this.unique.values()))) {
       let happiness = 0;
-      const cursor = new InputCursor(permutation);
+      const cursor = new ArrayCursor(permutation);
 
       // Iterate the cursor.
       while (cursor.hasNext()) {

@@ -1,4 +1,5 @@
-import { AOC, InputType } from '../../util/state.ts';
+import { AOC } from '../../util/state.ts';
+import { InputType } from '../../util/storage.ts';
 
 import * as standardCrypto from 'https://deno.land/std@0.210.0/crypto/mod.ts';
 import * as standardBytes from 'https://deno.land/std@0.210.0/bytes/mod.ts';
@@ -8,8 +9,8 @@ class AOCDay extends AOC {
 
   override async evaluate(): Promise<void> {
     const uint8Compare = new Uint8Array([0, 0, 0]);
-
     const v = this.helper.getInput(InputType.STRING, '');
+
     while (true) {
       // Generate input to MD5.
       const value = `${v}${this.store}`;

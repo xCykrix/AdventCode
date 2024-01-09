@@ -1,4 +1,5 @@
-import { AOC, InputType } from '../../util/state.ts';
+import { AOC } from '../../util/state.ts';
+import { InputType } from '../../util/storage.ts';
 
 interface AuntSue {
   children: number | null;

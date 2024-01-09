@@ -1,5 +1,6 @@
-import { InputCursor } from '../../util/InputCursor.ts';
-import { AOC, InputType, StoreValue } from '../../util/state.ts';
+import { ArrayCursor } from '../../util/helper/arrayCursor.ts';
+import { AOC } from '../../util/state.ts';
+import { InputType, StoreValue } from '../../util/storage.ts';
 import { permutations } from 'https://deno.land/x/combinatorics@1.1.2/mod.ts';
 
 class AOCDay extends AOC {
@@ -11,8 +12,8 @@ class AOCDay extends AOC {
   private parse = /(.*) to (.*) = (\d+)/;
 
   override async evaluate(): Promise<void> {
-    for (const v of this.helper.getInput(InputType.LIST, '') as string) {
-      // Parse the Input State.
+    for (const v of this.helper.getInput(InputType.LIST, '')) {
+      // Process the input.
       const match = v.match(this.parse);
       const start = match![1]!;
       const end = match![2]!;
@@ -27,9 +28,9 @@ class AOCDay extends AOC {
 
     for (const permutation of permutations(Array.from(this.unique.values()))) {
       let distance = 0;
-      const cursor = new InputCursor(permutation);
+      const cursor = new ArrayCursor(permutation);
 
-      // Iterate the InputCursor.
+      // Iterate the ArrayCursor.
       while (cursor.hasNext()) {
         const current = cursor.get();
         const next = cursor.getNext();

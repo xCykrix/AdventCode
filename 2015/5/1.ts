@@ -1,5 +1,6 @@
-import { InputCursor } from '../../util/InputCursor.ts';
-import { AOC, InputType, StoreValue } from '../../util/state.ts';
+import { ArrayCursor } from '../../util/helper/arrayCursor.ts';
+import { AOC } from '../../util/state.ts';
+import { InputType, StoreValue } from '../../util/storage.ts';
 
 class AOCDay extends AOC {
   private map = this.storage.makeStoredMap<boolean>();
@@ -10,7 +11,8 @@ class AOCDay extends AOC {
     const vowels = ['a', 'e', 'i', 'o', 'u'];
 
     for (const v of this.helper.getInput(InputType.SEPARATED_LIST, '')) {
-      const cursor = new InputCursor(v as string[]);
+      // Process the input.
+      const cursor = new ArrayCursor(v as string[]);
       let blacklistFound = false;
       let hasThreeVowels = false;
       let hasTwiceInRow = false;
