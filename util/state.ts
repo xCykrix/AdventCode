@@ -1,3 +1,4 @@
+import { StorageHelper } from './StorageHelper.ts';
 import { getInputAsSeparatedList, getInputAsSeparatedString } from './input.ts';
 import { getInputAsList } from './input.ts';
 import { getInputAsString } from './input.ts';
@@ -14,15 +15,8 @@ export abstract class AOC {
   abstract evaluate(): Promise<void>;
 }
 
-interface InputRefType {
-  [InputType.STRING]: string;
-  [InputType.SEPARATED_STRING]: string[];
-  [InputType.LIST]: string[];
-  [InputType.SEPARATED_LIST]: string[][];
-}
-
 export class AOCHelper {
-  public getInput<T extends InputType>(inputType: T, separator?: string): InputRefType[T] {
+  public getInput<T extends InputType>(inputType: T, separator?: string): OutputType[T] {
     return {
       get [InputType.STRING]() {
         return getInputAsString('./input');
@@ -40,19 +34,19 @@ export class AOCHelper {
   }
 }
 
-export class StorageHelper {
-  private stMapStorage: Map<string, StoreValueMap> = new Map();
-  private stValueStorage: Map<string, StoreValue> = new Map();
+export enum InputType {
+  STRING = 'STRING',
+  SEPARATED_STRING = 'SEPARATED_STRING',
+  LIST = 'LIST',
+  SEPARATED_LIST = 'SEPARATED_LIST',
+}
 
-  public makeStoredMap<T = string>(id = crypto.randomUUID()): StoreValueMap<T> {
-    if (!this.stMapStorage.has(id)) this.stMapStorage.set(id, new StoreValueMap<T>());
-    return this.stMapStorage.get(id) as StoreValueMap<T>;
-  }
 
-  public makeStoredValue<T = string>(defaultValue: T, id = crypto.randomUUID()): StoreValue<T> {
-    if (!this.stValueStorage.has(id)) this.stValueStorage.set(id, new StoreValue<T>(defaultValue));
-    return this.stValueStorage.get(id) as StoreValue<T>;
-  }
+interface OutputType {
+  [InputType.STRING]: string;
+  [InputType.SEPARATED_STRING]: string[];
+  [InputType.LIST]: string[];
+  [InputType.SEPARATED_LIST]: string[][];
 }
 
 export class StoreValueMap<T = unknown> extends Map<string, StoreValue<T>> {
@@ -101,11 +95,4 @@ export class StoreValue<T = unknown> {
     return `${this._value}`;
   }
 
-}
-
-export enum InputType {
-  STRING = 'STRING',
-  SEPARATED_STRING = 'SEPARATED_STRING',
-  LIST = 'LIST',
-  SEPARATED_LIST = 'SEPARATED_LIST',
 }
