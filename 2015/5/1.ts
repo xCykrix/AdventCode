@@ -1,6 +1,7 @@
 import { ArrayCursor } from '../../util/helper/arrayCursor.ts';
+import { InputType } from '../../util/helper/input.ts';
 import { AOC } from '../../util/state.ts';
-import { InputType, StoreValue } from '../../util/storage.ts';
+import { StoreValue } from '../../util/storage.ts';
 
 class AOCDay extends AOC {
   private map = this.storage.makeStoredMap<boolean>();

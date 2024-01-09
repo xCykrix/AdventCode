@@ -1,6 +1,7 @@
-import { AOC } from '../../util/state.ts';
-import { InputType, StoreValue } from '../../util/storage.ts';
+import { InputType } from '../../util/helper/input.ts';
 import { uint16 } from '../../util/number/uint16.ts';
+import { AOC } from '../../util/state.ts';
+import { StoreValue } from '../../util/storage.ts';
 
 type WireOperation = 'AND' | 'OR' | 'NOT' | 'LSHIFT' | 'RSHIFT';
 interface Wire {
@@ -45,7 +46,7 @@ class AOCDay extends AOC {
   }
 
   private setWireState(v: string): void {
-    // Parse Wire Input
+    // Parse Wire Input.
     const operation = (v.match(this.operationRegex) ?? [null])[0] as WireOperation;
     const args = v.match(this.argsRegex)?.map((arg) => isNaN(Number(arg)) ? arg : parseInt(arg))!;
     const destination = args?.pop() as string;

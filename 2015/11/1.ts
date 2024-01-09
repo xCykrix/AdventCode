@@ -1,5 +1,5 @@
+import { InputType } from '../../util/helper/input.ts';
 import { AOC } from '../../util/state.ts';
-import { InputType } from '../../util/storage.ts';
 
 class AOCDay extends AOC {
   // Regular Expressions
@@ -35,7 +35,8 @@ class AOCDay extends AOC {
   }
 
   override async evaluate(): Promise<void> {
-    let v = this.helper.getInput(InputType.STRING, '') as string;
+    // Process the input.
+    let v = this.helper.getInput(InputType.STRING);
 
     // If the last attempt was not valid, loop indefinitely.
     while (!this.valid(v)) {

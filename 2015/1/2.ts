@@ -1,5 +1,5 @@
+import { InputType } from '../../util/helper/input.ts';
 import { AOC } from '../../util/state.ts';
-import { InputType } from '../../util/storage.ts';
 
 class AOCDay extends AOC {
   private store = this.storage.makeStoredValue<number>(0);

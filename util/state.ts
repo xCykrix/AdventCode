@@ -1,5 +1,5 @@
-import { InputType, StorageHelper } from './storage.ts';
-import { getInputAsList, getInputAsSeparatedList, getInputAsSeparatedString, getInputAsString } from './helper/input.ts';
+import { StorageHelper } from './storage.ts';
+import { getInputAsList, getInputAsSeparatedList, getInputAsSeparatedString, getInputAsString, InputType } from './helper/input.ts';
 
 export abstract class AOC {
   public helper = new AOCHelper();
@@ -29,7 +29,7 @@ export class AOCHelper {
       get [InputType.SEPARATED_LIST]() {
         if (separator === undefined) throw new Error('InputType SEPARATED_LIST requires optional string separator.');
         return getInputAsSeparatedList('./input', separator ?? '');
-      }
+      },
     }[inputType];
   }
 }

@@ -1,5 +1,5 @@
+import { InputType } from '../../util/helper/input.ts';
 import { AOC } from '../../util/state.ts';
-import { InputType } from '../../util/storage.ts';
 
 class AOCDay extends AOC {
   private start = this.storage.makeStoredValue<number>(0);
@@ -7,7 +7,7 @@ class AOCDay extends AOC {
 
   override async evaluate(): Promise<void> {
     for (let v of this.helper.getInput(InputType.LIST)) {
-      // Add String Length to store1.
+      // Add String Length to start value.
       this.start.add(v.length);
 
       // Replace \x00 format to \u0000 format.
@@ -18,7 +18,7 @@ class AOCDay extends AOC {
       // Parse input as JSON.
       v = JSON.parse(v);
 
-      // Add String Length to store2 after JSON Parse.
+      // Add String Length to end value after JSON Parse.
       this.end.add(v.length);
     }
 

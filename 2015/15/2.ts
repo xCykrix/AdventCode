@@ -1,5 +1,6 @@
+import { InputType } from '../../util/helper/input.ts';
 import { AOC } from '../../util/state.ts';
-import { InputType, StoreValue } from '../../util/storage.ts';
+import { StoreValue } from '../../util/storage.ts';
 
 interface Ingredient {
   ingredient: string;
@@ -58,8 +59,8 @@ class AOCDay extends AOC {
   }
 
   override async evaluate(): Promise<void> {
-    for (const v of this.helper.getInput(InputType.LIST, '') as string[]) {
-      // Process the Input State.
+    for (const v of this.helper.getInput(InputType.LIST)) {
+      // Process the input.
       const matches = v.match(this.parse);
       const ingredient = matches![1]!.toLowerCase();
       const capacity = parseInt(matches![2]!);

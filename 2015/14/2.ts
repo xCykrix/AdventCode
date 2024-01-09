@@ -1,5 +1,6 @@
+import { InputType } from '../../util/helper/input.ts';
 import { AOC } from '../../util/state.ts';
-import { InputType, StoreValue } from '../../util/storage.ts';
+import { StoreValue } from '../../util/storage.ts';
 
 // Hardcoded Input: FlightDuration
 const duration = 2503;
@@ -24,8 +25,8 @@ class AOCDay extends AOC {
   private parse = /(.*) can fly (\d+) km\/s for (\d+) seconds, but then must rest for (\d+) seconds./;
 
   override async evaluate(): Promise<void> {
-    for (const v of this.helper.getInput(InputType.LIST, '') as string[]) {
-      // Parse the Input State.
+    for (const v of this.helper.getInput(InputType.LIST)) {
+      // Process the input.
       const matches = v.match(this.parse);
       const name = matches![1]!;
       const speed = parseInt(matches![2]!);

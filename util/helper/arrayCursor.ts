@@ -1,4 +1,3 @@
-
 export class ArrayCursor {
   private list: string[];
   private position = 0;

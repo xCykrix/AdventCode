@@ -1,14 +1,16 @@
+import { InputType } from '../../util/helper/input.ts';
 import { AOC } from '../../util/state.ts';
-import { InputType } from '../../util/storage.ts';
 
 class AOCDay extends AOC {
-  private store = this.storage.makeStoredValue<string>(this.helper.getInput(InputType.STRING, '') as string);
+  private store = this.storage.makeStoredValue<string>('');
   private cache = this.storage.makeStoredValue<string>('');
 
   // Regular Expressions
   private parse = /(\d)\1*/g;
 
   override async evaluate(): Promise<void> {
+    this.store.set(this.helper.getInput(InputType.STRING));
+
     // Loop 50 Times.
     for (let i = 0; i < 50; i++) {
       const stored = this.store.toString()!;

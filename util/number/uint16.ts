@@ -1,3 +1,3 @@
-export function uint16 (n: number): number {
+export function uint16(n: number): number {
   return n & 0xFFFF;
 }

@@ -1,8 +1,8 @@
+import { InputType } from '../../util/helper/input.ts';
 import { AOC } from '../../util/state.ts';
-import { InputType } from '../../util/storage.ts';
 
-import * as standardCrypto from 'https://deno.land/std@0.210.0/crypto/mod.ts';
 import * as standardBytes from 'https://deno.land/std@0.210.0/bytes/mod.ts';
+import * as standardCrypto from 'https://deno.land/std@0.210.0/crypto/mod.ts';
 
 class AOCDay extends AOC {
   private store = this.storage.makeStoredValue<number>(0);
@@ -12,7 +12,7 @@ class AOCDay extends AOC {
     const v = this.helper.getInput(InputType.STRING, '');
 
     while (true) {
-      // Generate input to MD5.
+      // Process the input.
       const value = `${v}${this.store}`;
 
       // Calculate the md5hash.

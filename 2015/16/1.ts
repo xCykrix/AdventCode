@@ -1,5 +1,5 @@
+import { InputType } from '../../util/helper/input.ts';
 import { AOC } from '../../util/state.ts';
-import { InputType } from '../../util/storage.ts';
 
 interface AuntSue {
   children: number | null;
@@ -33,14 +33,14 @@ class AOCDay extends AOC {
     trees: 3,
     cars: 2,
     perfumes: 1,
-  }
+  };
 
   override async evaluate(): Promise<void> {
-    for (const v of this.helper.getInput(InputType.LIST, '') as string) {
-      // Process the Input State.
+    for (const v of this.helper.getInput(InputType.LIST)) {
+      // Process the input.
       const matches = v.match(this.parse);
       const id = matches!.slice(1, 2)[0];
-      const sue: Partial<AuntSue> = {}
+      const sue: Partial<AuntSue> = {};
 
       // Parse the Partial Sue.
       for (const match of matches!.slice(2, matches!.length)) {

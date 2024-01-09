@@ -1,5 +1,5 @@
+import { InputType } from '../../util/helper/input.ts';
 import { AOC } from '../../util/state.ts';
-import { InputType } from '../../util/storage.ts';
 
 class AOCDay extends AOC {
   private count(object: Record<string, unknown>): number {
@@ -13,7 +13,7 @@ class AOCDay extends AOC {
     }
 
     // Map the identifiers to objects or numbers. Recurse objects.
-    // This could also be done in a reduce function.
+    // TODO(@xCykrix): This could also be done in a reduce function.
     let a = 0;
     identifiers.map((v) => {
       let value = 0;
@@ -30,7 +30,8 @@ class AOCDay extends AOC {
   }
 
   override async evaluate(): Promise<void> {
-    const v = this.helper.getInput(InputType.STRING, '') as string;
+    // Process the input.
+    const v = this.helper.getInput(InputType.STRING);
 
     // Parse to JSON and Count Numbers.
     const parse = JSON.parse(v);

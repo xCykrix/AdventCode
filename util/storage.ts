@@ -1,4 +1,3 @@
-
 export class StorageHelper {
   private stMapStorage: Map<string, StoreValueMap> = new Map();
   private stValueStorage: Map<string, StoreValue> = new Map();
@@ -28,7 +27,7 @@ export class StoreValueMap<T = unknown> extends Map<string, StoreValue<T>> {
 export class StoreValue<T = unknown> {
   private _value: T;
 
-  public constructor (value: T) {
+  public constructor(value: T) {
     this._value = value;
   }
 
@@ -45,7 +44,7 @@ export class StoreValue<T = unknown> {
   }
 
   public toggle(): void {
-    (this._value as boolean) = (!this._value as boolean);
+    (this._value as boolean) = !this._value as boolean;
   }
 
   public get(): T {
@@ -59,11 +58,4 @@ export class StoreValue<T = unknown> {
   public toString(): string {
     return `${this._value}`;
   }
-}
-
-export enum InputType {
-  STRING = 'STRING',
-  SEPARATED_STRING = 'SEPARATED_STRING',
-  LIST = 'LIST',
-  SEPARATED_LIST = 'SEPARATED_LIST',
 }

@@ -11,6 +11,12 @@ export function getInputAsList(file: string): string[] {
 }
 
 export function getInputAsSeparatedList(file: string, separator = ''): string[][] {
-  return getInputAsList(file).map((v) => v.split(separator))
+  return getInputAsList(file).map((v) => v.split(separator));
 }
 
+export enum InputType {
+  STRING = 'STRING',
+  SEPARATED_STRING = 'SEPARATED_STRING',
+  LIST = 'LIST',
+  SEPARATED_LIST = 'SEPARATED_LIST',
+}
