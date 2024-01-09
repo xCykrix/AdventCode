@@ -1,4 +1,4 @@
-import { InputCursor } from '../../util/input.ts';
+import { InputCursor } from '../../util/InputCursor.ts';
 import { AOC, InputType, StoreValue } from '../../util/state.ts';
 
 class AOCDay extends AOC {

@@ -1,30 +1,3 @@
-/**
- * Process input as a string.
- */
-export function getInputAsString(file: string): string {
-  return Deno.readTextFileSync(file).trim();
-}
-
-/**
- * Process input as a string separated by {@param separator}
- */
-export function getInputAsSeparatedString(file: string, separator = ''): string[] {
-  return Deno.readTextFileSync(file).trim().split(separator);
-}
-
-/**
- * Process input as a list of strings.
- */
-export function getInputAsList(file: string): string[] {
-  return Deno.readTextFileSync(file).trim().split('\n');
-}
-
-/**
- * Process input as a list of strings separated by {@param separator}.
- */
-export function getInputAsSeparatedList(file: string, separator = ''): string[][] {
-  return getInputAsList(file).map((v) => v.split(separator))
-}
 
 export class InputCursor {
   private list: string[];

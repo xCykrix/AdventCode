@@ -1,4 +1,4 @@
-import { InputCursor } from '../../util/input.ts';
+import { InputCursor } from '../../util/InputCursor.ts';
 import { AOC, InputType, StoreValue } from '../../util/state.ts';
 import { permutations } from 'https://deno.land/x/combinatorics@1.1.2/mod.ts';
 
