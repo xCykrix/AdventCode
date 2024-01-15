@@ -1,0 +1,77 @@
+{
+  // Compiler Options
+  "imports": {
+    "std/": "https://deno.land/std@0.211.0/",
+    "x/": "https://deno.land/x/"
+  },
+  "compilerOptions": {
+    "lib": [
+      "dom.asynciterable",
+      "deno.worker",
+      "deno.ns",
+      "deno.unstable"
+    ],
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "alwaysStrict": true,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noStrictGenericChecks": false,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "useUnknownInCatchVariables": true,
+    "allowJs": false,
+    "checkJs": false,
+    // "experimentalDecorators": true,
+    "suppressExcessPropertyErrors": false,
+    "suppressImplicitAnyIndexErrors": false
+  },
+
+  // Linting Options
+  "lint": {
+    "rules": {
+      "tags": [
+        "recommended",
+        "fresh"
+      ],
+      "include": [
+        "ban-untagged-todo",
+        "camelcase",
+        "default-param-last",
+        "eqeqeq",
+        "explicit-function-return-type",
+        "explicit-module-boundary-types",
+        "guard-for-in",
+        "no-const-assign",
+        "no-eval",
+        "no-implicit-declare-namespace-export",
+        "no-non-null-asserted-optional-chain",
+        "no-sparse-arrays",
+        "no-throw-literal",
+        "no-undef",
+        "prefer-ascii",
+        "triple-slash-reference"
+      ]
+    }
+  },
+
+  // Formatting Options
+  "fmt": {
+    "useTabs": false,
+    "lineWidth": 255,
+    "indentWidth": 2,
+    "singleQuote": true,
+    "proseWrap": "always"
+  }
+}
