@@ -2,7 +2,8 @@
   // Compiler Options
   "imports": {
     "std/": "https://deno.land/std@0.211.0/",
-    "x/": "https://deno.land/x/"
+    "x/": "https://deno.land/x/",
+    "framework/": "/root/dev/AOCFramework/"
   },
   "compilerOptions": {
     "lib": [
