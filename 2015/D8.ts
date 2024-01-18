@@ -1,6 +1,5 @@
-import { ListInputType } from 'framework/lib/helper/input.ts';
+import { StringInputType } from 'framework/lib/helper/input.ts';
 import { CTF, CTFFramework } from 'framework/mod.ts';
-import { CTFHelper } from 'framework/lib/helper.ts';
 
 export class CTFExecute extends CTFFramework<string> {
   public constructor() {
@@ -11,7 +10,7 @@ export class CTFExecute extends CTFFramework<string> {
 
   private async P1(ctf: CTFFramework): Promise<string> {
     const store = ctf.storage.getStoredValue(0);
-    const input = CTFHelper.getInput().structured().with(import.meta.url).separate('').getList(ListInputType.SEPARATED_LIST)!;
+    const input = ctf.helpers.getInput().structured().with(import.meta.url).separate('').getString(StringInputType.SEPARATED_STRING)!;
 
     for (const v of input) {
     }
@@ -21,7 +20,7 @@ export class CTFExecute extends CTFFramework<string> {
 
   private async P2(ctf: CTFFramework): Promise<string> {
     const store = ctf.storage.getStoredValue(0);
-    const input = CTFHelper.getInput().structured().with(import.meta.url).separate('').getList(ListInputType.SEPARATED_LIST)!;
+    const input = ctf.helpers.getInput().structured().with(import.meta.url).separate('').getString(StringInputType.SEPARATED_STRING)!;
 
     for (const v of input) {
     }
