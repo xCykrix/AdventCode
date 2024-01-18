@@ -1,4 +1,4 @@
-import { StringInputType } from 'framework/lib/helper/input.ts';
+import { BuiltInInputRegExpIdentifier } from 'framework/lib/helper/input.ts';
 import { CTF, CTFFramework } from 'framework/mod.ts';
 
 import * as standardBytes from 'std/bytes/mod.ts';
@@ -18,15 +18,15 @@ export class CTFExecute extends CTFFramework<string> {
 
   private async P1(ctf: CTFFramework): Promise<string> {
     const store = ctf.storage.getStoredValue(0);
-    const input = CTFHelper.getInput().structured().with(import.meta.url).getString(StringInputType.STRING)!;
+    const input = CTFHelper.getInput().structured().from(import.meta.url).parse(BuiltInInputRegExpIdentifier.STRING)!;
 
-    for (const vg of generate(input)) {
-      const v = await encode(vg);
-      if (!check(v)) {
+    for (const vg of Static.generate(input)) {
+      const v = await Static.encode(vg);
+      if (!Static.check(v)) {
         store.add(1);
         continue;
       }
-      if (!validate(v)) {
+      if (!Static.validate(v)) {
         store.add(1);
         continue;
       }
@@ -38,15 +38,15 @@ export class CTFExecute extends CTFFramework<string> {
 
   private async P2(ctf: CTFFramework): Promise<string> {
     const store = ctf.storage.getStoredValue(0);
-    const input = CTFHelper.getInput().structured().with(import.meta.url).getString(StringInputType.STRING)!;
+    const input = CTFHelper.getInput().structured().from(import.meta.url).parse(BuiltInInputRegExpIdentifier.STRING)!;
 
-    for (const vg of generate(input)) {
-      const v = await encode(vg);
-      if (!check(v, true)) {
+    for (const vg of Static.generate(input)) {
+      const v = await Static.encode(vg);
+      if (!Static.check(v, true)) {
         store.add(1);
         continue;
       }
-      if (!validate(v, true)) {
+      if (!Static.validate(v, true)) {
         store.add(1);
         continue;
       }
@@ -57,25 +57,27 @@ export class CTFExecute extends CTFFramework<string> {
   }
 }
 
-function* generate(v: string): Generator<Uint8Array> {
-  let i = 0;
-  const encoder = new TextEncoder();
-  while (true) {
-    yield encoder.encode(`${v}${i++}`);
+class Static {
+  public static *generate(v: string): Generator<Uint8Array> {
+    let i = 0;
+    const encoder = new TextEncoder();
+    while (true) {
+      yield encoder.encode(`${v}${i++}`);
+    }
   }
-}
 
-async function encode(v: Uint8Array): Promise<Uint8Array> {
-  return new Uint8Array(await standardCrypto.crypto.subtle.digest('MD5', v));
-}
+  public static async encode(v: Uint8Array): Promise<Uint8Array> {
+    return new Uint8Array(await standardCrypto.crypto.subtle.digest('MD5', v));
+  }
 
-function check(v: Uint8Array, long = false): boolean {
-  return standardBytes.startsWith(v, long ? uint8long : uint8short);
-}
+  public static check(v: Uint8Array, long = false): boolean {
+    return standardBytes.startsWith(v, long ? uint8long : uint8short);
+  }
 
-function validate(v: Uint8Array, long = false): boolean {
-  const hex = encodeHex(v);
-  return hex.startsWith(long ? '000000' : '00000');
+  public static validate(v: Uint8Array, long = false): boolean {
+    const hex = encodeHex(v);
+    return hex.startsWith(long ? '000000' : '00000');
+  }
 }
 
 await CTF.do(new CTFExecute());

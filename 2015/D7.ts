@@ -1,4 +1,4 @@
-import { ListInputType } from 'framework/lib/helper/input.ts';
+import { BuiltInInputRegExpIdentifier } from 'framework/lib/helper/input.ts';
 import { CTF, CTFFramework } from 'framework/mod.ts';
 import { CTFHelper } from 'framework/lib/helper.ts';
 import { StoreValue, StoreValueMap } from 'framework/lib/storage.ts';
@@ -27,7 +27,7 @@ export class CTFExecute extends CTFFramework<string> {
 
   private async P1(ctf: CTFFramework): Promise<string> {
     const map = ctf.storage.getStoredMap<number | Wire>();
-    const input = CTFHelper.getInput().structured().with(import.meta.url).separate('').getList(ListInputType.LIST)!;
+    const input = CTFHelper.getInput().structured().from(import.meta.url).parse(BuiltInInputRegExpIdentifier.LIST)!;
 
     for (const v of input) {
       Static.setWireState(v, map);
@@ -39,7 +39,7 @@ export class CTFExecute extends CTFFramework<string> {
   private async P2(ctf: CTFFramework): Promise<string> {
     const map1 = ctf.storage.getStoredMap<number | Wire>();
     const map2 = ctf.storage.getStoredMap<number | Wire>();
-    const input = CTFHelper.getInput().structured().with(import.meta.url).separate('').getList(ListInputType.LIST)!;
+    const input = CTFHelper.getInput().structured().from(import.meta.url).parse(BuiltInInputRegExpIdentifier.LIST)!;
 
     for (const v of input) {
       Static.setWireState(v, map1);
@@ -52,7 +52,7 @@ export class CTFExecute extends CTFFramework<string> {
   }
 }
 
-export class Static {
+class Static {
   private static bitwise = {
     'AND': (n1: number, n2: number) => CTFHelper.getMathExtension().uint16(n1 & n2),
     'OR': (n1: number, n2: number) => CTFHelper.getMathExtension().uint16(n1 | n2),

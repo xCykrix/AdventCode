@@ -1,17 +1,11 @@
-import { ListInputType } from 'framework/lib/helper/input.ts';
+import { BuiltInInputRegExpIdentifier } from 'framework/lib/helper/input.ts';
 import { CTF, CTFFramework } from 'framework/mod.ts';
 import { StoreValue } from 'framework/lib/storage.ts';
 import { CTFHelper } from 'framework/lib/helper.ts';
 
-enum RegExpIdentifiers {
-  PARSE_INPUT = 'PARSE_INPUT',
-}
-
 export class CTFExecute extends CTFFramework<string> {
   public constructor() {
     super();
-
-    CTFHelper.getRegularExpression().register(RegExpIdentifiers.PARSE_INPUT, /(turn on|turn off|toggle) (\d+),(\d+) through (\d+),(\d+)/);
 
     this.register('P1', this.P1);
     this.register('P2', this.P2);
@@ -19,15 +13,14 @@ export class CTFExecute extends CTFFramework<string> {
 
   private async P1(ctf: CTFFramework): Promise<string> {
     const map = ctf.storage.getStoredMap<number>();
-    const input = CTFHelper.getInput().structured().with(import.meta.url).separate('').getList(ListInputType.LIST)!;
+    const input = CTFHelper.getInput().structured().from(import.meta.url).expression(/(turn on|turn off|toggle) (\d+),(\d+) through (\d+),(\d+)/).parse(BuiltInInputRegExpIdentifier.EXPRESSION)!;
 
     for (const v of input) {
-      const match = v.match(CTFHelper.getRegularExpression().get(RegExpIdentifiers.PARSE_INPUT)!)!;
-      const action = match[1]! as 'turn on' | 'turn off' | 'toggle';
-      const x1 = parseInt(match[2]!);
-      const y1 = parseInt(match[3]!);
-      const x2 = parseInt(match[4]!);
-      const y2 = parseInt(match[5]!);
+      const action = v[0] as 'turn on' | 'turn off' | 'toggle';
+      const x1 = parseInt(v[1]!);
+      const y1 = parseInt(v[2]!);
+      const x2 = parseInt(v[3]!);
+      const y2 = parseInt(v[4]!);
 
       for (let cx = x1; cx <= x2; cx++) {
         for (let cy = y1; cy <= y2; cy++) {
@@ -55,15 +48,14 @@ export class CTFExecute extends CTFFramework<string> {
 
   private async P2(ctf: CTFFramework): Promise<string> {
     const map = ctf.storage.getStoredMap<number>();
-    const input = CTFHelper.getInput().structured().with(import.meta.url).separate('').getList(ListInputType.LIST)!;
+    const input = CTFHelper.getInput().structured().from(import.meta.url).expression(/(turn on|turn off|toggle) (\d+),(\d+) through (\d+),(\d+)/).parse(BuiltInInputRegExpIdentifier.EXPRESSION)!;
 
     for (const v of input) {
-      const match = v.match(CTFHelper.getRegularExpression().get(RegExpIdentifiers.PARSE_INPUT)!)!;
-      const action = match[1]! as 'turn on' | 'turn off' | 'toggle';
-      const x1 = parseInt(match[2]!);
-      const y1 = parseInt(match[3]!);
-      const x2 = parseInt(match[4]!);
-      const y2 = parseInt(match[5]!);
+      const action = v[0] as 'turn on' | 'turn off' | 'toggle';
+      const x1 = parseInt(v[1]!);
+      const y1 = parseInt(v[2]!);
+      const x2 = parseInt(v[3]!);
+      const y2 = parseInt(v[4]!);
 
       for (let cx = x1; cx <= x2; cx++) {
         for (let cy = y1; cy <= y2; cy++) {

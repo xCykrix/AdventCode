@@ -1,4 +1,4 @@
-import { ListInputType } from 'framework/lib/helper/input.ts';
+import { BuiltInInputRegExpIdentifier } from 'framework/lib/helper/input.ts';
 import { CTF, CTFFramework } from 'framework/mod.ts';
 import { CTFHelper } from 'framework/lib/helper.ts';
 
@@ -11,10 +11,14 @@ export class CTFExecute extends CTFFramework<string> {
 
   private async P1(ctf: CTFFramework): Promise<string> {
     const store = ctf.storage.getStoredValue(0);
-    const input = CTFHelper.getInput().structured().with(import.meta.url).separate('x').getList(ListInputType.SEPARATED_LIST)!;
+    const input = CTFHelper.getInput().structured().from(import.meta.url).expression(/(\d+)x(\d+)x(\d+)/).parse(BuiltInInputRegExpIdentifier.EXPRESSION)!;
 
     for (const v of input) {
-      const [l, w, h] = getVars(v);
+      const [l, w, h] = [
+        parseInt(v[0]!),
+        parseInt(v[1]!),
+        parseInt(v[2]!),
+      ];
 
       // Calculate the side.
       const lw = l! * w!;
@@ -33,10 +37,14 @@ export class CTFExecute extends CTFFramework<string> {
 
   private async P2(ctf: CTFFramework): Promise<string> {
     const store = ctf.storage.getStoredValue(0);
-    const input = CTFHelper.getInput().structured().with(import.meta.url).separate('x').getList(ListInputType.SEPARATED_LIST)!;
+    const input = CTFHelper.getInput().structured().from(import.meta.url).expression(/(\d+)x(\d+)x(\d+)/).parse(BuiltInInputRegExpIdentifier.EXPRESSION)!;
 
     for (const v of input) {
-      const [l, w, h] = getVars(v);
+      const [l, w, h] = [
+        parseInt(v[0]!),
+        parseInt(v[1]!),
+        parseInt(v[2]!),
+      ];
 
       // Sort the shortest sides.
       const ordered = [l!, w!, h!].sort((a, b) => a - b);
@@ -47,14 +55,6 @@ export class CTFExecute extends CTFFramework<string> {
 
     return `${store.get()}`;
   }
-}
-
-function getVars(v: string[]): number[] {
-  return [
-    parseInt(v[0]!),
-    parseInt(v[1]!),
-    parseInt(v[2]!),
-  ];
 }
 
 await CTF.do(new CTFExecute());

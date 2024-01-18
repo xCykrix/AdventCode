@@ -1,4 +1,4 @@
-import { StringInputType } from 'framework/lib/helper/input.ts';
+import { BuiltInInputRegExpIdentifier } from 'framework/lib/helper/input.ts';
 import { CTF, CTFFramework } from 'framework/mod.ts';
 import { CTFHelper } from 'framework/lib/helper.ts';
 
@@ -11,7 +11,7 @@ export class CTFExecute extends CTFFramework<string> {
 
   private async P1(ctf: CTFFramework): Promise<string> {
     const store = ctf.storage.getStoredValue(0);
-    const input = CTFHelper.getInput().structured().with(import.meta.url).separate('').getString(StringInputType.SEPARATED_STRING)!;
+    const input = CTFHelper.getInput().structured().from(import.meta.url).parse(BuiltInInputRegExpIdentifier.CHARACTERS)!;
 
     for (const v of input) {
       v === '(' ? store.add(1) : store.subtract(1);
@@ -23,7 +23,7 @@ export class CTFExecute extends CTFFramework<string> {
   private async P2(ctf: CTFFramework): Promise<string> {
     const store = ctf.storage.getStoredValue(0);
     const counter = ctf.storage.getStoredValue(0);
-    const input = CTFHelper.getInput().structured().with(import.meta.url).separate('').getString(StringInputType.SEPARATED_STRING)!;
+    const input = CTFHelper.getInput().structured().from(import.meta.url).parse(BuiltInInputRegExpIdentifier.CHARACTERS)!;
 
     for (const v of input) {
       v === '(' ? store.add(1) : store.subtract(1);
