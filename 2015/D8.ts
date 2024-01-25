@@ -24,13 +24,17 @@ export class CTFExecute extends CTFFramework<string> {
   }
 
   private async P2(ctf: CTFFramework): Promise<string> {
-    const store = ctf.storage.getStoredValue(0);
+    const len1 = ctf.storage.getStoredValue<number>(0);
+    const len2 = ctf.storage.getStoredValue<number>(0);
+
     const input = CTFHelper.getInput().structured().from(import.meta.url).parse(BuiltInInputRegExpIdentifier.LIST)!;
 
     for (const v of input) {
+      len1.add(v.length);
+      len2.add(JSON.stringify(v).length);
     }
 
-    return `${store.get()}`;
+    return `${len2.get() - len1.get()}`;
   }
 }
 

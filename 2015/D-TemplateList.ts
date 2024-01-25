@@ -11,7 +11,7 @@ export class CTFExecute extends CTFFramework<string> {
 
   private async P1(ctf: CTFFramework): Promise<string> {
     const store = ctf.storage.getStoredValue(0);
-    const input = CTFHelper.getInput().structured().from(import.meta.url).parse(BuiltInInputRegExpIdentifier.STRING_LIST)!;
+    const input = CTFHelper.getInput().structured().from(import.meta.url).parse(BuiltInInputRegExpIdentifier.LIST)!;
 
     for (const v of input) {
     }
@@ -21,7 +21,7 @@ export class CTFExecute extends CTFFramework<string> {
 
   private async P2(ctf: CTFFramework): Promise<string> {
     const store = ctf.storage.getStoredValue(0);
-    const input = CTFHelper.getInput().structured().from(import.meta.url).parse(BuiltInInputRegExpIdentifier.STRING_LIST_CHARS)!;
+    const input = CTFHelper.getInput().structured().from(import.meta.url).parse(BuiltInInputRegExpIdentifier.LIST_CHARACTERS)!;
 
     for (const v of input) {
     }

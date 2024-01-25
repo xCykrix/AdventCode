@@ -10,14 +10,13 @@ export interface Wire {
 }
 
 enum RegExpIdentifiers {
-  PARSE_INPUT_OP = 'PARSE_INPUT_OP',
-  PARSE_INPUT_ARGS = 'PARSE_INPUT_ARGS',
+  PARSE_INPUT_OP = 'D7_PARSE_INPUT_OP',
+  PARSE_INPUT_ARGS = 'D7_PARSE_INPUT_ARGS',
 }
 
 export class CTFExecute extends CTFFramework<string> {
   public constructor() {
     super();
-
     CTFHelper.getRegularExpression().register(RegExpIdentifiers.PARSE_INPUT_OP, /[A-Z]+/g);
     CTFHelper.getRegularExpression().register(RegExpIdentifiers.PARSE_INPUT_ARGS, /[a-z0-9]+/g);
 
@@ -59,7 +58,7 @@ class Static {
     'NOT': (n1: number) => CTFHelper.getMathExtension().uint16(~n1),
     'LSHIFT': (n1: number, n2: number) => CTFHelper.getMathExtension().uint16(n1 << n2),
     'RSHIFT': (nq: number, n2: number) => CTFHelper.getMathExtension().uint16(nq >> n2),
-  }
+  };
 
   public static getWireState(v: string | number, map: StoreValueMap<number | Wire>): number {
     if (typeof v === 'number') return v;
