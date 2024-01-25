@@ -22,8 +22,9 @@ export class CTFExecute extends CTFFramework<string> {
     const ingredients = ctf.storage.getStoredMap<Ingredient>();
     const input = CTFHelper.getInput().structured().from(import.meta.url).expression(/(.*): capacity (-?\d+), durability (-?\d+), flavor (-?\d+), texture (-?\d+), calories (-?\d+)/).parse()!;
 
+    let rid = 0;
     for (const v of input) {
-      const ingredient = v[0]!.toLowerCase();
+      const ingredient = `r${++rid}`;
       const capacity = parseInt(v[1]!);
       const durability = parseInt(v[2]!);
       const flavor = parseInt(v[3]!);
@@ -66,13 +67,51 @@ export class CTFExecute extends CTFFramework<string> {
   }
 
   private async P2(ctf: CTFFramework): Promise<string> {
-    const store = ctf.storage.getStoredValue(0);
+    const ingredients = ctf.storage.getStoredMap<Ingredient>();
     const input = CTFHelper.getInput().structured().from(import.meta.url).expression(/(.*): capacity (-?\d+), durability (-?\d+), flavor (-?\d+), texture (-?\d+), calories (-?\d+)/).parse()!;
 
+    let rid = 0;
     for (const v of input) {
+      const ingredient = `r${++rid}`;
+      const capacity = parseInt(v[1]!);
+      const durability = parseInt(v[2]!);
+      const flavor = parseInt(v[3]!);
+      const texture = parseInt(v[4]!);
+      const calories = parseInt(v[5]!);
+
+      ingredients.set(
+        ingredient,
+        new StoreValue({
+          ingredient,
+          capacity,
+          durability,
+          flavor,
+          texture,
+          calories,
+        }),
+      );
     }
 
-    return `${store.get()}`;
+    let max = 0;
+    for (let r1 = 0; r1 < 100; r1++) {
+      for (let r2 = 0; r2 < 100 - r1; r2++) {
+        for (let r3 = 0; r3 < 100 - r2 - r1; r3++) {
+          const r4 = 100 - r3 - r2 - r1;
+          if ((r4 + r3 + r2 + r1) !== 100) continue;
+
+          const cookie = Static.cookie({
+            r1,
+            r2,
+            r3,
+            r4,
+          }, ingredients);
+
+          if (cookie.calories === 500) max = Math.max(max, cookie.score);
+        }
+      }
+    }
+
+    return `${max}`;
   }
 }
 
