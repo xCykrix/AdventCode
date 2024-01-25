@@ -33,6 +33,13 @@
     "https://deno.land/x/combinatorics@1.1.2/mod.ts": "f33c6ce1342a7ea5ce35fd80be9e4b413c672c63cee0c25549c1aba6baec899d",
     "https://deno.land/x/combinatorics@1.1.2/permutations.ts": "b02b79a979cff9641e6986910475d77abf57b51079590c5f8bbd226ccc09a9a4",
     "https://deno.land/x/combinatorics@1.1.2/permutations_with_replacement.ts": "4a90c4d86818ff877208d1eb19df4c6203d485904457a2ee85eb5269221836ec",
-    "https://deno.land/x/combinatorics@1.1.2/power_set.ts": "ea9b3d81cc87e1e37c81cfe71f2df8480d66352ec6d72dec47a14dea35bf6405"
+    "https://deno.land/x/combinatorics@1.1.2/power_set.ts": "ea9b3d81cc87e1e37c81cfe71f2df8480d66352ec6d72dec47a14dea35bf6405",
+    "https://raw.githubusercontent.com/xCykrix/CTFFramework/main/lib/helper.ts": "6498453d1fdcc04d538e44530cfed4a35003616b6d19a0ec793006ce9f6b49e4",
+    "https://raw.githubusercontent.com/xCykrix/CTFFramework/main/lib/helper/cursor.ts": "5a96c4f7bccaa6c13b26b8579c68230459801759349a255a326cb0d41d5df122",
+    "https://raw.githubusercontent.com/xCykrix/CTFFramework/main/lib/helper/input.ts": "8ae56cde8d50495f5d6d303b71b084c2f06c5ab02827226c0e7768140dfb4512",
+    "https://raw.githubusercontent.com/xCykrix/CTFFramework/main/lib/helper/math.ts": "68daffc10d582fa387a73bcff653c703715029f2023e2da9ba0b38f97cddef1d",
+    "https://raw.githubusercontent.com/xCykrix/CTFFramework/main/lib/helper/regex.ts": "b012f3b3770e36f544e99a8ebe8374d459a6baf82123177a340a146227481d09",
+    "https://raw.githubusercontent.com/xCykrix/CTFFramework/main/lib/storage.ts": "294c24195ea0bc4ed5ddc0fe13c09a76cf850720fded8ec6e56a8ef6ee20fb85",
+    "https://raw.githubusercontent.com/xCykrix/CTFFramework/main/mod.ts": "8f8ed4d32fdfec0e1280dc25a95dc597083ea40538855c22b36df8ecdd7b1243"
   }
 }
